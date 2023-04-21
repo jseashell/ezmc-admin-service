@@ -5,8 +5,8 @@ Game management service for the EZ Minecraft stack via RESTful API.
 ## Install
 
 ```sh
-git clone https://github.com/jseashell/ezmc-game-service.git
-cd ezmc-game-service
+git clone https://github.com/jseashell/ezmc-admin-service.git
+cd ezmc-admin-service
 npm install
 ```
 

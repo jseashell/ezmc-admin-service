@@ -3,9 +3,12 @@ import type { AWS } from '@serverless/typescript';
 import { down, ipAddress, start, status, stop, up } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
-  service: 'ezmc-game-service',
+  service: 'ezmc-admin-service',
   frameworkVersion: '3',
   plugins: ['serverless-bundle', 'serverless-offline'],
+  custom: {
+    deploymentBucket: 'deployments-${self:provider.region}',
+  },
   provider: {
     name: 'aws',
     runtime: 'nodejs18.x',
