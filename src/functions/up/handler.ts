@@ -7,6 +7,8 @@ import { middyfy } from '@libs/lambda';
 import schema from './schema';
 
 const up: ValidatedEventApiGatewayProxyEvent<typeof schema> = async (event) => {
+  console.log('EVENT', event);
+
   const accountId = event.body.accountId;
   const serverName = event.body.serverName;
   const stackName = formatStackName(accountId, serverName);
