@@ -50,6 +50,7 @@ const serverlessConfiguration: AWS = {
               'ecs:ListServices',
               'ecs:ListTasks',
               'ecs:UpdateService',
+              'elasticfilesystem:CreateFileSystem',
               'ssm:GetParameters',
             ],
             Resource: ['*'],
