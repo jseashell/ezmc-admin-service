@@ -7,17 +7,19 @@ const serverlessConfiguration: AWS = {
   frameworkVersion: '3',
   plugins: ['serverless-bundle', 'serverless-offline'],
   custom: {
-    deploymentBucket: 'deployments-${self:provider.region}',
+    deploymentBucket: 'deployments-${aws:accountId}-${self:provider.region}',
   },
   provider: {
     name: 'aws',
     runtime: 'nodejs18.x',
     region: 'us-east-1',
     stage: "${opt:stage, 'main'}",
-    deploymentBucket: '${self:custom.deploymentBucket}',
+    deploymentBucket: {
+      name: '${self:custom.deploymentBucket}',
+    },
     stackTags: {
-      Stage: '${self:provider.stage}',
-      Region: '${self:provider.region}',
+      stage: '${self:provider.stage}',
+      region: '${self:provider.region}',
     },
     apiGateway: {
       minimumCompressionSize: 1024,
