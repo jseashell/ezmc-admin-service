@@ -18,7 +18,7 @@ const serverlessConfiguration: AWS = {
       name: '${self:custom.deploymentBucket}',
     },
     stackTags: {
-      stage: '${self:provider.stage}',
+      stage: '${sls:stage}',
       region: '${self:provider.region}',
     },
     apiGateway: {
@@ -28,6 +28,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      AWS_ACCOUNT_ID: '${aws:accountId}',
+      REGION: '${self:provider.region}',
     },
     logs: {
       frameworkLambda: true,
@@ -71,11 +73,6 @@ const serverlessConfiguration: AWS = {
               'ec2:ReplaceRoute',
             ],
             Resource: ['*'],
-          },
-          {
-            Effect: 'Allow',
-            Action: ['s3:GetObject'],
-            Resource: ['arn:aws:s3:::ezmc-cf-templates/game-server.yml'],
           },
         ],
       },

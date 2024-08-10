@@ -4,14 +4,17 @@ import { formatJsonError, formatJsonResponse } from '@libs/api-gateway';
 import { formatStackName } from '@libs/ecs';
 import { middyfy } from '@libs/lambda';
 
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import schema from './schema';
 
 const up: ValidatedEventApiGatewayProxyEvent<typeof schema> = async (event) => {
-  console.log('EVENT', event);
-
   const accountId = event.body.accountId;
   const serverName = event.body.serverName;
   const stackName = formatStackName(accountId, serverName);
+
+  const path = resolve('./src/functions/up/template.yml');
+  const templateBody = readFileSync(path).toString();
 
   const client = new CloudFormationClient({ region: process.env.REGION });
   return client
@@ -19,7 +22,7 @@ const up: ValidatedEventApiGatewayProxyEvent<typeof schema> = async (event) => {
       new CreateStackCommand({
         StackName: stackName,
         Capabilities: [Capability.CAPABILITY_IAM],
-        TemplateURL: 'https://ezmc-cf-templates.s3.amazonaws.com/game-server.yml',
+        TemplateBody: templateBody,
         Tags: [
           {
             Key: 'AccountId',
@@ -33,7 +36,6 @@ const up: ValidatedEventApiGatewayProxyEvent<typeof schema> = async (event) => {
       }),
     )
     .then((res) => {
-      console.log('Created new server', accountId, serverName);
       return formatJsonResponse({
         message: 'Success',
         data: res,
