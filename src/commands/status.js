@@ -1,11 +1,7 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
-import { formatJsonError, formatJsonResponse } from '@libs/api-gateway';
-import { buildClusterArn, getServiceArn } from '@libs/ecs';
-import { middyfy } from '@libs/lambda';
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import { buildClusterArn, getServiceArn } from '../libs/ecs.js';
 
-const status: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
-  const clusterName = event.queryStringParameters.clusterName;
+export async function status(clusterName) {
   const serviceArn = await getServiceArn(clusterName);
 
   const client = new ECSClient({ region: process.env.REGION });
@@ -33,19 +29,13 @@ const status: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (even
     })
     .then((res) => {
       if (res.tasks?.length > 0 && res.tasks[0].containers?.length > 0) {
-        return formatJsonResponse({
-          status: res.tasks[0].containers[0].lastStatus,
-        });
+        return res.tasks[0].containers[0].lastStatus;
       } else {
-        return formatJsonResponse({
-          status: 'LAUNCHING',
-        });
+        return 'LAUNCHING';
       }
     })
     .catch((err) => {
       console.error(err);
-      return formatJsonError(err);
+      return 'ERROR';
     });
-};
-
-export const main = middyfy(status);
+}

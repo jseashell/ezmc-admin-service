@@ -5,7 +5,7 @@ import { DescribeServicesCommand, ECSClient, ListServicesCommand } from '@aws-sd
  * @param clusterName
  * @returns service arn
  */
-export const getServiceArn = async (clusterName: string) => {
+export const getServiceArn = async (clusterName) => {
   const client = new ECSClient({ region: process.env.REGION });
   return client
     .send(
@@ -14,7 +14,7 @@ export const getServiceArn = async (clusterName: string) => {
       }),
     )
     .then((res) => {
-      return res.serviceArns?.[0] || null;
+      return res.serviceArns?.[0] || '';
     });
 };
 
@@ -23,7 +23,7 @@ export const getServiceArn = async (clusterName: string) => {
  * @param clusterName
  * @returns service name
  */
-export const getServiceName = async (clusterName: string) => {
+export const getServiceName = async (clusterName) => {
   const client = new ECSClient({ region: process.env.REGION });
   return getServiceArn(clusterName).then(async (serviceArn) => {
     return client
@@ -34,7 +34,7 @@ export const getServiceName = async (clusterName: string) => {
         }),
       )
       .then((res) => {
-        return res.services?.[0].serviceName || null;
+        return res.services?.[0].serviceName || '';
       });
   });
 };
@@ -43,17 +43,6 @@ export const getServiceName = async (clusterName: string) => {
  * @param clusterName
  * @returns arn for this region/account for the given cluster
  */
-export const buildClusterArn = (clusterName: string) => {
+export const buildClusterArn = (clusterName) => {
   return `arn:aws:ecs:${process.env.REGION}:${process.env.AWS_ACCOUNT_ID}:cluster/${clusterName}`;
-};
-
-/**
- * Formats the given accountId and server name into a valid stack name (alphanumeric, only hyphens)
- * @param accountId
- * @param serverName
- * @return normalized stack name
- */
-export const formatStackName = (accountId: string, serverName: string): string => {
-  const normalizedServerName = serverName.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-  return `ezmc-${accountId}-${normalizedServerName}`;
 };
