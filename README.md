@@ -5,51 +5,14 @@ Game management service for the EZ Minecraft stack via RESTful API.
 ## Install
 
 ```sh
-git clone https://github.com/jseashell/ezmc-admin-service.git
-cd ezmc-admin-service
-npm install
+npm i -g ezmc
 ```
 
-> Requires Node.js v20+. If using [nvm](https://nvm.sh), run `nvm use` to setup Node.js.
+> Requires Node.js v20+
 
-## Running the App
+## Commands
 
-Emulate the AWS environment offline locally and request the API
-
-```sh
-npm start
-...
-Server ready: http://localhost:3000 🚀
-```
-
-Spin up the first game server
-
-```sh
-curl localhost:3000/main/up \
-  -X POST \
-  -H 'Content-Type: application/json' \
-  -d '{"accountId": "00000001", "serverName": "Test Server"}'
-```
-
-Get the server IP address
-
-```sh
-curl localhost:3000/main/ipAddress \
-  -X GET \
-  -H 'Content-Type: application/json' \
-  -d '{"clusterName": "ecs_cluster_name"}'
-```
-
-## API
-
-| Endpoint     | Method | Description                                     | Request                                                                        | Response                                                       |
-| ------------ | ------ | ----------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| `/down`      | `POST` | Tears down a game server. Data is not retained. | <pre>{<br/> "accountId": "000001",<br/> "serverName: "Test Server"<br/>}</pre> | <pre>{<br/> "message": "Success",<br/> "data": ...<br/>}</pre> |
-| `/ipAddress` | `GET`  | Gets the public IP address for a game server.   | <pre>?clusterName=000001</pre>                                                 | <pre>{<br/> "ipAddress": "192.168.0.1"<br/>}</pre>             |
-| `/start`     | `POST` | Starts an existing game server that is stopped. | <pre>{<br/> "clusterName": "ecs_cluster_name",<br/>}</pre>                     | <pre>{<br/> "message": "Success",<br/> "data": ...<br/>}</pre> |
-| `/status`    | `GET`  | Gets the running status for a game server.      | <pre>?clusterName=000001</pre>                                                 | <pre>{<br/> "ipAddress": "192.168.0.1"<br/>}</pre>             |
-| `/stop`      | `POST` | Stops an existing game server that is running.  | <pre>{<br/> "clusterName": "ecs_cluster_name",<br/>}</pre>                     | <pre>{<br/> "message": "Success",<br/> "data": ...<br/>}</pre> |
-| `/up`        | `POST` | Spins up a new game server                      | <pre>{<br/> "accountId": "000001",<br/> "serverName: "Test Server"<br/>}</pre> | <pre>{<br/> "message": "Success",<br/> "data": ...<br/>}</pre> |
+### create
 
 ## Deployment
 

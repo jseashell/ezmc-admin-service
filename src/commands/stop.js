@@ -1,12 +1,17 @@
 import { ECSClient, UpdateServiceCommand } from '@aws-sdk/client-ecs';
-import { buildClusterArn, getServiceName } from '../libs/ecs.js';
+import { buildClusterArn, getServiceName } from '../utils/ecs.js';
 
-export async function stop(clusterName) {
-  const serviceName = await getServiceName(clusterName);
+export async function stop(serverName) {
+  const serviceName = await getServiceName(serverName);
 
-  return new ECSClient({ region: process.env.REGION }).send(
+  const region = process.env.AWS_REGION;
+  if (!region) {
+    throw new Error('Invalid AWS region');
+  }
+
+  return new ECSClient({ region: region }).send(
     new UpdateServiceCommand({
-      cluster: buildClusterArn(clusterName),
+      cluster: buildClusterArn(serverName),
       service: serviceName,
       desiredCount: 0,
     }),

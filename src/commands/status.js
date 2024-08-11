@@ -1,14 +1,19 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
-import { buildClusterArn, getServiceArn } from '../libs/ecs.js';
+import { buildClusterArn, getServiceArn } from '../utils/ecs.js';
 
-export async function status(clusterName) {
-  const serviceArn = await getServiceArn(clusterName);
+export async function status(serverName) {
+  const serviceArn = await getServiceArn(serverName);
 
-  const client = new ECSClient({ region: process.env.REGION });
+  const region = process.env.AWS_REGION;
+  if (!region) {
+    throw new Error('Invalid AWS region');
+  }
+
+  const client = new ECSClient({ region: region });
   return client
     .send(
       new ListTasksCommand({
-        cluster: buildClusterArn(clusterName),
+        cluster: buildClusterArn(serverName),
         serviceName: serviceArn,
       }),
     )
@@ -16,13 +21,13 @@ export async function status(clusterName) {
       if (res.taskArns?.length > 0) {
         return res.taskArns[0];
       } else {
-        return Promise.reject(`No tasks for service "${serviceArn}" in cluster "${clusterName}"`);
+        return Promise.reject(`No tasks for service "${serviceArn}" in "${serverName}"`);
       }
     })
     .then((taskArn) => {
       return client.send(
         new DescribeTasksCommand({
-          cluster: buildClusterArn(clusterName),
+          cluster: buildClusterArn(serverName),
           tasks: [taskArn],
         }),
       );
@@ -34,8 +39,7 @@ export async function status(clusterName) {
         return 'LAUNCHING';
       }
     })
-    .catch((err) => {
-      console.error(err);
-      return 'ERROR';
+    .catch(() => {
+      return 'STOPPED';
     });
 }
