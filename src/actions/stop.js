@@ -9,11 +9,35 @@ export async function stop(serverName) {
     throw new Error('Invalid AWS region');
   }
 
-  return new ECSClient({ region: region }).send(
+  await new ECSClient({ region: region }).send(
     new UpdateServiceCommand({
       cluster: buildClusterArn(serverName),
       service: serviceName,
       desiredCount: 0,
     }),
   );
+
+  // await waitForTaskToStop()
 }
+
+const waitForTaskToStop = async (taskArn, region) => {
+  const i = 0;
+  while (true) {
+    const describeTasksCommand = new DescribeTasksCommand({
+      cluster: CLUSTER_NAME,
+      tasks: [taskArn],
+    });
+
+    const tasksResponse = await new ECSClient({ region: region }).send(describeTasksCommand);
+    const task = tasksResponse.tasks?.[0];
+
+    if (task && task.lastStatus === 'STOPPED') {
+      console.log(`Task ${taskArn} has stopped.`);
+      break;
+    }
+
+    console.log(`Still waiting${new Array(i % 3).fill('.')}`);
+    i++;
+    await new Promise((res) => setTimeout(res, 3000));
+  }
+};
