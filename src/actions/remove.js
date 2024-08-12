@@ -15,29 +15,13 @@ export async function remove(serverName) {
     throw new Error('Invalid AWS region');
   }
 
-  // Example usage
   const clusterName = 'ezmc-' + serverName + '-cluster';
 
-  await deleteService(region);
-  await detachCapacityProviders(clusterName, region);
-
-  await new CloudFormationClient({ region: region }).send(
-    new DeleteStackCommand({
-      StackName: 'ezmc-' + serverName,
-    }),
-  );
+  await deleteService(region)
+    .then(() => detachCapacityProviders(clusterName, region))
+    .then(() => deleteStack(serverName));
 
   console.log('success!');
-}
-
-async function detachCapacityProviders(clusterName, region) {
-  const client = new ECSClient({ region: region });
-  await client.send(
-    new PutClusterCapacityProvidersCommand({
-      cluster: clusterName,
-      capacityProviders: [], // none
-    }),
-  );
 }
 
 async function deleteService(serverName, region) {
@@ -101,4 +85,22 @@ async function deleteService(serverName, region) {
   } catch (error) {
     console.error('Error deleting service:', error);
   }
+}
+
+async function detachCapacityProviders(clusterName, region) {
+  const client = new ECSClient({ region: region });
+  await client.send(
+    new PutClusterCapacityProvidersCommand({
+      cluster: clusterName,
+      capacityProviders: [], // none
+    }),
+  );
+}
+
+async function deleteStack(serverName) {
+  return new CloudFormationClient({ region: region }).send(
+    new DeleteStackCommand({
+      StackName: 'ezmc-' + serverName,
+    }),
+  );
 }
