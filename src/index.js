@@ -1,13 +1,13 @@
 import 'dotenv/config';
 
 import { program } from 'commander';
-import { ipAddress } from './commands/ipaddr.js';
-import { list } from './commands/list.js';
-import { newServer } from './commands/new.js';
-import { remove } from './commands/remove.js';
-import { start } from './commands/start.js';
-import { status } from './commands/status.js';
-import { stop } from './commands/stop.js';
+import { ipAddress } from './actions/ipaddr.js';
+import { list } from './actions/list.js';
+import { newServer } from './actions/new.js';
+import { remove } from './actions/remove.js';
+import { start } from './actions/start.js';
+import { status } from './actions/status.js';
+import { stop } from './actions/stop.js';
 
 program.name('ezmc').description('CLI for self-hosting a Minecraft Java server with AWS ECS.').version('0.1.0');
 
