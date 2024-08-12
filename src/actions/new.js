@@ -2,6 +2,7 @@ import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/c
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { yamlParse } from 'yaml-cfn';
+import { ipAddress } from './ipaddr.js';
 import { status } from './status.js';
 
 export async function newServer(serverName) {
@@ -51,7 +52,10 @@ export async function newServer(serverName) {
   while (true) {
     const s = await status(serverName);
     if (s?.toLowerCase() == 'running') {
-      console.log('Success!');
+      console.log('success!');
+
+      const ip = await ipAddress(serverName);
+      console.log('server ip', ip);
       break;
     } else {
       await sleep(1);
