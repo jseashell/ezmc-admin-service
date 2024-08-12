@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import 'dotenv/config';
 
 import { program } from 'commander';
@@ -14,9 +16,9 @@ program.name('ezmc').description('CLI for self-hosting a Minecraft Java server w
 program
   .command('ipaddr')
   .description('displays the server ip address')
-  .requiredOption('-n, --name <string>', 'server name')
-  .action(async (options) => {
-    const ip = await ipAddress(options.name);
+  .argument('<string>', 'server name')
+  .action(async (serverName) => {
+    const ip = await ipAddress(serverName);
     console.log(ip);
   });
 
@@ -31,9 +33,9 @@ program
 program
   .command('new')
   .description('spins up a new server')
-  .requiredOption('-n, --name <string>', 'alphanumeric and hyphens only. must start with alpha character')
-  .action(async (options) => {
-    if (!options.name || !options.name.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
+  .argument('<string>', 'server name. alphanumeric and hyphens only. must start with alpha character')
+  .action(async (serverName) => {
+    if (!serverName || !serverName.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
       console.error('invalid name format');
       return;
     }
@@ -57,47 +59,38 @@ program
 program
   .command('rm')
   .description('tear down a server (cannot be undone)')
-  .requiredOption('-n, --name <string>', 'server name')
-  .action((options) => {
-    remove(options.name);
+  .argument('<string>', 'server name')
+  .action(async (serverName) => {
+    remove(serverName.name);
   });
 
 program
   .command('start')
   .description('starts a server')
-  .requiredOption('-n --name', 'server name')
-  .action((options) => {
-    start(options.name);
+  .argument('<string>', 'server name')
+  .action(async (serverName) => {
+    start(serverName);
   });
 
 program
   .command('status')
   .description('displays the server status')
-  .requiredOption('-n, --name <string>', 'server name')
-  .action(async (options) => {
-    const res = await status(options.name);
+  .argument('<string>', 'server name')
+  .action(async (serverName) => {
+    const res = await status(serverName);
     console.log(res);
   });
 
 program
   .command('stop')
   .description('stops a server')
-  .requiredOption('-n, --name <string>', 'server name')
-  .action((options) => {
-    stop(options.name);
+  .argument('<string>', 'server name')
+  .action(async (serverName) => {
+    stop(serverName);
   });
 
-function errorColor(str) {
-  // Add ANSI escape codes to display text in red.
-  return `\x1b[31m${str}\x1b[0m`;
-}
-
 program.configureOutput({
-  // Visibly override write routines as example!
-  writeOut: (str) => process.stdout.write(`[OUT] ${str}`),
-  writeErr: (str) => process.stdout.write(`[ERR] ${str}`),
-  // Highlight errors in color.
-  outputError: (str, write) => write(errorColor(str)),
+  outputError: (str, write) => write(`\x1b[31m${str}\x1b[0m`),
 });
 
 program.parse();
