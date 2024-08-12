@@ -1,4 +1,9 @@
-import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/client-cloudformation';
+import {
+  Capability,
+  CloudFormationClient,
+  CreateStackCommand,
+  DescribeStacksCommand,
+} from '@aws-sdk/client-cloudformation';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { yamlParse } from 'yaml-cfn';
@@ -6,13 +11,19 @@ import { ipAddress } from './ipaddr.js';
 import { status } from './status.js';
 
 export async function newServer(serverName) {
-  const path = resolve('./src/templates/default.yml');
-  const templateBody = readFileSync(path).toString();
-
   const region = process.env.AWS_REGION;
   if (!region) {
     throw new Error('Invalid AWS region');
   }
+
+  const alreadyExists = await stackExists(serverName, region);
+  if (alreadyExists) {
+    console.error(`${serverName} already exists, please try again...`);
+    return;
+  }
+
+  const path = resolve('./src/templates/default.yml');
+  const templateBody = readFileSync(path).toString();
 
   const client = new CloudFormationClient({ region: region });
   client.send(
@@ -52,6 +63,7 @@ export async function newServer(serverName) {
   while (true) {
     const s = await status(serverName);
     if (s?.toLowerCase() == 'running') {
+      await sleep(1);
       console.log('success!');
 
       const ip = await ipAddress(serverName);
@@ -63,6 +75,29 @@ export async function newServer(serverName) {
     }
   }
 }
+
+const stackExists = async (serverName, region) => {
+  try {
+    const client = new CloudFormationClient({ region: region });
+    const response = await client.send(
+      new DescribeStacksCommand({
+        StackName: 'ezmc-' + serverName,
+      }),
+    );
+
+    if (response.Stacks && response.Stacks.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (error.name === 'ValidationError' && error.message.includes('does not exist')) {
+      return false;
+    } else {
+      throw error;
+    }
+  }
+};
 
 /**
  * sleeps the given number of seconds
