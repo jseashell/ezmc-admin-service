@@ -52,8 +52,8 @@ program
       return;
     }
 
-    console.log(`creating ${options.name} in ${region}, please wait...`);
-    newServer(options.name);
+    console.log(`creating ${serverName} in ${region}, please wait...`);
+    newServer(serverName);
   });
 
 program
@@ -61,7 +61,7 @@ program
   .description('tear down a server (cannot be undone)')
   .argument('<string>', 'server name')
   .action(async (serverName) => {
-    remove(serverName.name);
+    remove(serverName);
   });
 
 program
