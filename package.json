@@ -2,13 +2,16 @@
   "name": "ezmc-cli",
   "version": "0.1.0",
   "description": "CLI for self-hosting a Minecraft Java server with AWS ECS",
-  "private": true,
-  "keywords": [],
+  "keywords": [
+    "Minecraft hosting",
+    "AWS",
+    "Cloudformation",
+    "CLI"
+  ],
   "author": "John Schellinger",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node ./src/index.js",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
   },
   "dependencies": {

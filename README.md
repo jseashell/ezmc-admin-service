@@ -1,55 +1,62 @@
-# EZMC Game Service
+# EZMC Game Server
 
-Game management service for the EZ Minecraft stack via RESTful API.
+Server management CLI for self-hosting Minecraft Java Edition in your AWS account. This CLI is a wrapper around [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image that contains useful commands for managing resources without logging in or using the AWS CLI directly.
 
-## Install
+## Usage
 
 ```sh
-npm i -g ezmc
+# clone the repo
+git clone git@github.com:jseashell/ezmc-cli.git
+
+# install dependencies
+npm install
+
+# link to your global packages
+npm link
+
+# create your first server
+ezmc new my-first-server
+
+# ... wait a few minutes ...
+
+# get your server ip address
+ezmc ipaddr my-first-server
 ```
 
 > Requires Node.js v20+
 
 ## Commands
 
-### create
+| Command  | Description                                                                                            |
+| :------- | :----------------------------------------------------------------------------------------------------- |
+| `ipaddr` | Displays a server's ip address                                                                         |
+| `ls`     | Displays a list of your ezmc servers                                                                   |
+| `new`    | Creates a new server. Wait a few minutes for commands like `ipaddr` or `status` to function.           |
+| `rm`     | Removes a server (cannot be undone). Wait a few minutes after stopping a server to remove it entirely. |
+| `start`  | Starts a server                                                                                        |
+| `status` | Displays a server's status                                                                             |
+| `stop`   | Stops a server                                                                                         |
 
-## Deployment
+## Options
 
-This microservice is deployed using [Serverless Framework](https://www.serverless.com/framework/docs), which leverages a [Cloudformation template](https://aws.amazon.com/cloudformation/resources/templates/) to provision cloud resources for supporting this REST API.
+### Defaults
 
-```sh
-npx serverless deploy --stage $STAGE --region $REGION --verbose
-```
+| Option        |  Value   |
+| :------------ | :------: |
+| Max players   |    20    |
+| Difficulty    |  Normal  |
+| View Distance |    10    |
+| Game Mode     | Survival |
+| Level Type    | Default  |
+| Seed          |    -     |
+| Admin Players |    -     |
+| Op List       |    -     |
 
-> `$STAGE` and `$REGION` are optional. The deployment will be staged as `main` to the `us-east-1` region.
+## Infrastructure
 
-Deployment is executed by [Github Actions](https://docs.github.com/en/actions). See [github-actions.yml](./.github/workflows/github-actions.yml) for configuration.
+AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command. Remove the server entirely with `rm` (after stop has completed).
 
-## Project structure
-
-The project code base is mainly located within the `src` folder.
-
-```text
-.
-├── .github                # CI/CD config
-├── .husky                 # Git hooks
-├── src
-│   ├── functions          # Lambda functions
-│   └── libs               # Shared code
-├── .eslintrc.js           # Lint config
-├── .gitignore
-├── .nvmrc                 # NVM config
-├── .prettierignore        # Code style ignore patterns
-├── .prettierrc.yml        # Code style config
-├── LICENSE
-├── package-lock.json
-├── package.json
-├── README.md
-├── serverless.ts          # Serverless config
-├── tsconfig.json          # Typescript config
-└── tsconfig.paths.json    # Typescript import path shortcuts
-```
+> Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
 
 ## License
 
