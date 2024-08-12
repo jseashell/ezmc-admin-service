@@ -1,4 +1,5 @@
 import { CloudFormationClient, DeleteStackCommand } from '@aws-sdk/client-cloudformation';
+import { ECSClient, PutClusterCapacityProvidersCommand } from '@aws-sdk/client-ecs';
 
 export async function remove(serverName) {
   const region = process.env.AWS_REGION;
@@ -8,10 +9,8 @@ export async function remove(serverName) {
 
   // Example usage
   const clusterName = 'ezmc-' + serverName + '-cluster';
-  const capacityProviderToDetach = 'your-capacity-provider'; // Replace with the actual capacity provider name
 
-  await detachCapacityProvider(clusterName, capacityProviderToDetach);
-  console.log(`detached capacity provider ${capacityProviderToDetach} from cluster ${clusterName}`);
+  await detachCapacityProviders(clusterName, region);
 
   await new CloudFormationClient({ region: region }).send(
     new DeleteStackCommand({
@@ -19,13 +18,11 @@ export async function remove(serverName) {
     }),
   );
 
-  console.log('deleting cfn stack');
+  console.log('success!');
 }
 
-const { ECSClient, PutClusterCapacityProvidersCommand, DescribeClustersCommand } = require('@aws-sdk/client-ecs');
-
-async function detachCapacityProvider(clusterName, capacityProviderToDetach) {
-  const client = new ECSClient({ region: process.env.REGION });
+async function detachCapacityProviders(clusterName, region) {
+  const client = new ECSClient({ region: region });
   await client.send(
     new PutClusterCapacityProvidersCommand({
       cluster: clusterName,

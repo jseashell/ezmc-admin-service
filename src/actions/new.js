@@ -6,6 +6,11 @@ import { ipAddress } from './ipaddr.js';
 import { status } from './status.js';
 
 export async function newServer(serverName) {
+  if (stackExists(serverName)) {
+    console.error('server name already exists, please try again...');
+    return;
+  }
+
   const path = resolve('./src/templates/default.yml');
   const templateBody = readFileSync(path).toString();
 
@@ -63,6 +68,29 @@ export async function newServer(serverName) {
     }
   }
 }
+
+const stackExists = async (stackName) => {
+  try {
+    const client = new CloudFormationClient({ region: process.env.AWS_REGION });
+    const response = await client.send(
+      new DescribeStacksCommand({
+        StackName: stackName,
+      }),
+    );
+
+    if (response.Stacks && response.Stacks.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (error.name === 'ValidationError' && error.message.includes('does not exist')) {
+      return false;
+    } else {
+      throw error;
+    }
+  }
+};
 
 /**
  * sleeps the given number of seconds
