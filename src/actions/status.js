@@ -1,7 +1,13 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
+import { stackExists } from '../utils/cfn.js';
 import { buildClusterArn, getServiceArn } from '../utils/ecs.js';
 
 export async function status(serverName) {
+  if (!stackExists(serverName)) {
+    console.log(`${serverName} does not exist`);
+    return;
+  }
+
   const serviceArn = await getServiceArn(serverName);
 
   const region = process.env.AWS_REGION;
@@ -21,7 +27,7 @@ export async function status(serverName) {
       if (res.taskArns?.length > 0) {
         return res.taskArns[0];
       } else {
-        return Promise.reject(`No tasks for service "${serviceArn}" in "${serverName}"`);
+        return 'STOPPED';
       }
     })
     .then((taskArn) => {

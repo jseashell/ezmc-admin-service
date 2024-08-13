@@ -1,8 +1,14 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCommand } from '@aws-sdk/client-ecs';
+import { stackExists } from '../utils/cfn.js';
 import { buildClusterArn } from '../utils/ecs.js';
 
 export async function ipAddress(serverName) {
+  if (!stackExists(serverName)) {
+    console.log(`${serverName} does not exist`);
+    return;
+  }
+
   const region = process.env.AWS_REGION;
   if (!region) {
     throw new Error('Invalid AWS region');

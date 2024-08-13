@@ -1,13 +1,10 @@
-import { CloudFormationClient, DeleteStackCommand } from '@aws-sdk/client-cloudformation';
+import { CloudFormationClient, DeleteStackCommand, DeletionMode } from '@aws-sdk/client-cloudformation';
 import {
   DeleteServiceCommand,
   DescribeServicesCommand,
   ECSClient,
-  ListTasksCommand,
   PutClusterCapacityProvidersCommand,
-  StopTaskCommand,
 } from '@aws-sdk/client-ecs';
-import { getServiceName } from '../utils/ecs.js';
 
 export async function remove(serverName) {
   const region = process.env.AWS_REGION;
@@ -17,51 +14,25 @@ export async function remove(serverName) {
 
   const clusterName = 'ezmc-' + serverName + '-cluster';
 
-  await deleteService(region)
-    .then(() => detachCapacityProviders(clusterName, region))
-    .then(() => deleteStack(serverName));
+  await forceDeleteService(serverName)
+    .then(async () => await sleep(5))
+    .then(() => detachCapacityProviders(clusterName))
+    .then(async () => await sleep(5))
+    .then(() => forceDeleteStack(serverName));
 
   console.log('success!');
 }
 
-async function deleteService(serverName, region) {
+/**
+ * Use force to delete the service even if there are tasks still running
+ */
+async function forceDeleteService(serverName) {
   try {
-    // Step 1: List running tasks in the service
     const clusterName = 'ezmc-' + serverName + '-cluster';
-    const serviceName = await getServiceName(clusterName);
-    const listTasksCommand = new ListTasksCommand({
-      cluster: clusterName,
-      serviceName: serviceName,
-    });
+    const serviceName = 'ezmc-' + serverName + '-ecs-service';
 
-    const client = new ECSClient({ region: region });
-    const tasksResponse = await client.send(listTasksCommand);
-    const taskArns = tasksResponse.taskArns || [];
+    const client = new ECSClient({ region: process.env.AWS_REGION });
 
-    if (taskArns.length === 0) {
-      console.log(`No tasks found running in the service ${serviceName}.`);
-    } else if (taskArns.length > 1) {
-      throw new Error('More than one task found in the service, which is unexpected.');
-    } else {
-      const taskArn = taskArns[0];
-
-      console.log(`Found task ${taskArn} running in the service.`);
-
-      // Step 2: Stop the running task
-      const stopTaskCommand = new StopTaskCommand({
-        cluster: clusterName,
-        task: taskArn,
-        reason: 'Service is being deleted',
-      });
-
-      await client.send(stopTaskCommand);
-      console.log(`Requested stop for task: ${taskArn}`);
-
-      // Wait for the task to stop
-      await waitForTaskToStop(taskArn);
-    }
-
-    // Step 3: Delete the service
     const describeServiceCommand = new DescribeServicesCommand({
       cluster: clusterName,
       services: [serviceName],
@@ -74,21 +45,18 @@ async function deleteService(serverName, region) {
       const deleteServiceCommand = new DeleteServiceCommand({
         cluster: clusterName,
         service: serviceName,
-        force: true, // Use force to delete the service even if there are tasks still running
+        force: true,
       });
 
       await client.send(deleteServiceCommand);
-      console.log(`Deleted service: ${serviceName}`);
-    } else {
-      console.log(`Service ${serviceName} not found.`);
     }
   } catch (error) {
-    console.error('Error deleting service:', error);
+    console.error(error.message);
   }
 }
 
-async function detachCapacityProviders(clusterName, region) {
-  const client = new ECSClient({ region: region });
+async function detachCapacityProviders(clusterName) {
+  const client = new ECSClient({ region: process.env.AWS_REGION });
   await client.send(
     new PutClusterCapacityProvidersCommand({
       cluster: clusterName,
@@ -97,10 +65,24 @@ async function detachCapacityProviders(clusterName, region) {
   );
 }
 
-async function deleteStack(serverName) {
-  return new CloudFormationClient({ region: region }).send(
+async function forceDeleteStack(serverName) {
+  return new CloudFormationClient({ region: process.env.AWS_REGION }).send(
     new DeleteStackCommand({
       StackName: 'ezmc-' + serverName,
+      DeletionMode: DeletionMode.FORCE_DELETE_STACK,
     }),
   );
 }
+
+/**
+ * sleeps the given number of seconds
+ * @param {number} n
+ * @returns async sleep
+ */
+const sleep = async (n) => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res();
+    }, n * 1000);
+  });
+};

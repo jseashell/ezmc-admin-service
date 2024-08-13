@@ -1,8 +1,14 @@
-import { ECSClient, UpdateServiceCommand } from '@aws-sdk/client-ecs';
-import { buildClusterArn, getServiceName } from '../utils/ecs.js';
+import { DescribeTasksCommand, ECSClient, ListTasksCommand, UpdateServiceCommand } from '@aws-sdk/client-ecs';
+import { stackExists } from '../utils/cfn.js';
+import { buildClusterArn, getServiceArn } from '../utils/ecs.js';
 
 export async function stop(serverName) {
-  const serviceName = await getServiceName(serverName);
+  if (!stackExists(serverName)) {
+    console.log(`${serverName} does not exist`);
+    return;
+  }
+
+  const serviceName = 'ezmc-' + serverName + '-ecs-service';
 
   const region = process.env.AWS_REGION;
   if (!region) {
@@ -17,27 +23,48 @@ export async function stop(serverName) {
     }),
   );
 
-  // await waitForTaskToStop()
+  await waitForTaskToStop(serverName);
 }
 
-const waitForTaskToStop = async (taskArn, region) => {
-  const i = 0;
-  while (true) {
-    const describeTasksCommand = new DescribeTasksCommand({
-      cluster: CLUSTER_NAME,
-      tasks: [taskArn],
+const waitForTaskToStop = async (serverName) => {
+  console.log(`waiting for ${serverName} to stop`);
+
+  const serviceArn = await getServiceArn(serverName);
+  const taskArn = await new ECSClient({ region: process.env.AWS_REGION })
+    .send(
+      new ListTasksCommand({
+        cluster: buildClusterArn(serverName),
+        serviceName: serviceArn,
+      }),
+    )
+    .then((res) => {
+      if (res.taskArns?.length > 0) {
+        return res.taskArns[0];
+      } else {
+        return '';
+      }
     });
 
-    const tasksResponse = await new ECSClient({ region: region }).send(describeTasksCommand);
-    const task = tasksResponse.tasks?.[0];
+  if (taskArn) {
+    const i = 0;
+    while (true) {
+      const describeTasksCommand = new DescribeTasksCommand({
+        cluster: CLUSTER_NAME,
+        tasks: [taskArn],
+      });
 
-    if (task && task.lastStatus === 'STOPPED') {
-      console.log(`Task ${taskArn} has stopped.`);
-      break;
+      const tasksResponse = await new ECSClient({ region: process.env.AWS_REGION }).send(describeTasksCommand);
+      const task = tasksResponse.tasks?.[0];
+
+      if (task && task.lastStatus === 'STOPPED') {
+        break;
+      }
+
+      console.log(`still waiting${new Array(i % 3).fill('.')}`);
+      i++;
+      await new Promise((res) => setTimeout(res, 3000));
     }
-
-    console.log(`Still waiting${new Array(i % 3).fill('.')}`);
-    i++;
-    await new Promise((res) => setTimeout(res, 3000));
   }
+
+  console.log(`${serverName} stopped`);
 };
