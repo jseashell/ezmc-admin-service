@@ -1,10 +1,11 @@
 import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/client-cloudformation';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { ipAddress } from './ipaddr.js';
-import { status } from './status.js';
+import { stackExists } from '../utils/cfn';
+import { ipAddress } from './ipaddr';
+import { status } from './status';
 
-export async function newServer(serverName) {
+export async function newServer(serverName: string) {
   if (!serverName || !serverName.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
     console.error('invalid name format');
     return;
@@ -22,7 +23,7 @@ export async function newServer(serverName) {
     return;
   }
 
-  const alreadyExists = await stackExists(serverName, region);
+  const alreadyExists = await stackExists(serverName);
   if (alreadyExists) {
     console.error(`${serverName} already exists, please try again...`);
     return;
@@ -70,8 +71,8 @@ export async function newServer(serverName) {
  * @param {number} n
  * @returns async sleep
  */
-const sleep = async (n) => {
-  return new Promise((res) => {
+const sleep = async (n: number) => {
+  return new Promise<void>((res) => {
     setTimeout(() => {
       res();
     }, n * 1000);

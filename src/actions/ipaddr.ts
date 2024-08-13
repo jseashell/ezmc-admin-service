@@ -1,12 +1,12 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCommand } from '@aws-sdk/client-ecs';
-import { stackExists } from '../utils/cfn.js';
-import { clusterArn } from '../utils/ecs.js';
+import { stackExists } from '../utils/cfn';
+import { clusterArn } from '../utils/ecs';
 
-export async function ipAddress(serverName) {
+export async function ipAddress(serverName: string): Promise<string> {
   if (!stackExists(serverName)) {
     console.log(`${serverName} does not exist`);
-    return;
+    return '';
   }
 
   const region = process.env.AWS_REGION;
@@ -22,7 +22,7 @@ export async function ipAddress(serverName) {
       }),
     )
     .then((res) => {
-      if (res.containerInstanceArns?.length > 0) {
+      if (res?.containerInstanceArns?.[0]) {
         return res.containerInstanceArns[0];
       } else {
         return Promise.reject(`No container instances for "${serverName}"`);
@@ -37,14 +37,14 @@ export async function ipAddress(serverName) {
       );
     })
     .then((res) => {
-      if (res.containerInstances?.length > 0) {
+      if (res.containerInstances?.[0]) {
         return res.containerInstances[0];
       } else {
         return Promise.reject('Unable to describe a container instance');
       }
     })
     .then((containerInstance) => {
-      const instanceId = containerInstance.ec2InstanceId;
+      const instanceId = containerInstance.ec2InstanceId || '';
       const ec2Client = new EC2Client({ region: process.env.AWS_REGION });
       return ec2Client.send(
         new DescribeInstancesCommand({
@@ -58,7 +58,7 @@ export async function ipAddress(serverName) {
       );
     })
     .then((res) => {
-      return res.Reservations?.[0].Instances?.[0].PublicIpAddress;
+      return res.Reservations?.[0].Instances?.[0].PublicIpAddress || '';
     })
     .catch((err) => {
       console.error(err);

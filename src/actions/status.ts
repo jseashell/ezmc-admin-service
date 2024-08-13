@@ -1,8 +1,8 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
-import { stackExists } from '../utils/cfn.js';
-import { clusterArn, serviceArn } from '../utils/ecs.js';
+import { stackExists } from '../utils/cfn';
+import { clusterArn, serviceArn } from '../utils/ecs';
 
-export async function status(serverName) {
+export async function status(serverName: string) {
   if (!stackExists(serverName)) {
     console.log(`${serverName} does not exist`);
     return;
@@ -14,33 +14,32 @@ export async function status(serverName) {
   }
 
   const client = new ECSClient({ region: region });
-  let tasks = await client.send(
+
+  const service = await serviceArn(serverName);
+
+  console.log('d', service);
+  const res = await client.send(
     new ListTasksCommand({
       cluster: clusterArn(serverName),
-      serviceName: serviceArn(serverName),
+      serviceName: service,
     }),
   );
 
-  let taskArn;
-  if (tasks?.taskArns?.length > 0) {
-    taskArn = tasks.taskArns[0];
-  } else {
+  if (res?.taskArns?.length == 0) {
     return 'STOPPED';
   }
 
+  const taskArn = res?.taskArns?.[0] || '';
+
   try {
-    tasks = await client.send(
+    const res = await client.send(
       new DescribeTasksCommand({
         cluster: clusterArn(serverName),
         tasks: [taskArn],
       }),
     );
 
-    if (res.tasks?.length > 0 && res.tasks[0].containers?.length > 0) {
-      return res.tasks[0].containers[0].lastStatus;
-    } else {
-      return 'LAUNCHING';
-    }
+    return res?.tasks?.[0]?.containers?.[0]?.lastStatus || 'LAUNCHING';
   } catch (err) {
     return 'STOPPED';
   }

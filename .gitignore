@@ -2,7 +2,7 @@
 .webpack
 .vscode
 node_modules
-
+bin
 .DS_Store
 .code-workspace
 .env

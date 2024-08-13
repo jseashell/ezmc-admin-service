@@ -3,15 +3,14 @@
   "version": "0.0.1",
   "description": "CLI for self-hosting a Minecraft Java server with AWS ECS",
   "keywords": [
-    "Minecraft hosting",
+    "Minecraft server",
     "AWS",
-    "Cloudformation",
     "CLI"
   ],
   "author": "John Schellinger",
   "license": "MIT",
-  "type": "module",
   "scripts": {
+    "build": "rm -rf bin && npx tsc",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
   },
   "dependencies": {
@@ -25,9 +24,11 @@
     "ini": "^4.1.3"
   },
   "devDependencies": {
-    "prettier": "^2.8.3"
+    "@types/node": "^22.2.0",
+    "prettier": "^2.8.3",
+    "typescript": "^5.5.4"
   },
   "bin": {
-    "ezmc": "./src/index.js"
+    "ezmc": "./bin/index.js"
   }
 }

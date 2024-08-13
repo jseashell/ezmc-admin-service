@@ -3,14 +3,14 @@
 import 'dotenv/config';
 
 import { program } from 'commander';
-import { copyIpAddress } from './actions/copy-ipaddr.js';
-import { ipAddress } from './actions/ipaddr.js';
-import { list } from './actions/list.js';
-import { newServer } from './actions/new.js';
-import { remove } from './actions/remove.js';
-import { start } from './actions/start.js';
-import { status } from './actions/status.js';
-import { stop } from './actions/stop.js';
+import { copyIpAddress } from './actions/copy-ipaddr';
+import { ipAddress } from './actions/ipaddr';
+import { list } from './actions/list';
+import { newServer } from './actions/new';
+import { remove } from './actions/remove';
+import { start } from './actions/start';
+import { status } from './actions/status';
+import { stop } from './actions/stop';
 
 program.name('ezmc').description('CLI for self-hosting a Minecraft Java server with AWS ECS.').version('0.1.0');
 
@@ -47,7 +47,7 @@ program
   .command('start')
   .description('starts a server')
   .argument('<string>', 'server name')
-  .action((serverName) => start(serverName));
+  .action(async (serverName) => start(serverName));
 
 program
   .command('status')

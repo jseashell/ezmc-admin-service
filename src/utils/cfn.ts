@@ -1,12 +1,12 @@
 import { CloudFormationClient, DescribeStacksCommand } from '@aws-sdk/client-cloudformation';
 
-export function stackName(serverName) {
+export function stackName(serverName: string) {
   return `ezmc-${serverName}`;
 }
 
-export const stackExists = async (serverName, region) => {
+export const stackExists = async (serverName: string) => {
   try {
-    const client = new CloudFormationClient({ region: region });
+    const client = new CloudFormationClient({ region: process.env.AWS_REGION });
     const response = await client.send(
       new DescribeStacksCommand({
         StackName: 'ezmc-' + serverName,
@@ -18,7 +18,7 @@ export const stackExists = async (serverName, region) => {
     } else {
       return false;
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === 'ValidationError' && error.message.includes('does not exist')) {
       return false;
     } else {
@@ -27,7 +27,7 @@ export const stackExists = async (serverName, region) => {
   }
 };
 
-const checkStackStatus = async (stackName) => {
+const checkStackStatus = async (stackName: string) => {
   const client = new CloudFormationClient({ region: 'us-east-1' });
 
   try {
@@ -35,7 +35,7 @@ const checkStackStatus = async (stackName) => {
     const response = await client.send(command);
 
     if (response.Stacks && response.Stacks.length > 0) {
-      const stackStatus = response.Stacks[0].StackStatus;
+      const stackStatus = response.Stacks[0].StackStatus || 'UNKNOWN';
       const rollbackStates = [
         'ROLLBACK_IN_PROGRESS',
         'ROLLBACK_COMPLETE',

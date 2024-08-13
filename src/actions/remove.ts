@@ -5,10 +5,10 @@ import {
   ECSClient,
   PutClusterCapacityProvidersCommand,
 } from '@aws-sdk/client-ecs';
-import { stackName } from '../utils/cfn.js';
-import { clusterName, serviceName } from '../utils/ecs.js';
+import { stackName } from '../utils/cfn';
+import { clusterName, serviceName } from '../utils/ecs';
 
-export async function remove(serverName) {
+export async function remove(serverName: string) {
   const region = process.env.AWS_REGION;
   if (!region) {
     throw new Error('Invalid AWS region');
@@ -26,10 +26,11 @@ export async function remove(serverName) {
 /**
  * Use force to delete the service even if there are tasks still running
  */
-async function forceDeleteService(serverName) {
+async function forceDeleteService(serverName: string) {
   try {
     const client = new ECSClient({ region: process.env.AWS_REGION });
 
+    console.log('a', serverName);
     const describeServiceCommand = new DescribeServicesCommand({
       cluster: clusterName(serverName),
       services: [serviceName(serverName)],
@@ -38,6 +39,7 @@ async function forceDeleteService(serverName) {
     const describeResponse = await client.send(describeServiceCommand);
     const service = describeResponse.services?.[0];
 
+    console.log('c', serverName);
     if (service && service.serviceArn) {
       const deleteServiceCommand = new DeleteServiceCommand({
         cluster: clusterName(serverName),
@@ -47,22 +49,23 @@ async function forceDeleteService(serverName) {
 
       await client.send(deleteServiceCommand);
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(error.message);
   }
 }
 
-async function detachCapacityProviders(serverName) {
+async function detachCapacityProviders(serverName: string) {
   const client = new ECSClient({ region: process.env.AWS_REGION });
   await client.send(
     new PutClusterCapacityProvidersCommand({
       cluster: clusterName(serverName),
       capacityProviders: [], // none
+      defaultCapacityProviderStrategy: undefined,
     }),
   );
 }
 
-async function forceDeleteStack(serverName) {
+async function forceDeleteStack(serverName: string) {
   return new CloudFormationClient({ region: process.env.AWS_REGION }).send(
     new DeleteStackCommand({
       StackName: stackName(serverName),
@@ -76,8 +79,8 @@ async function forceDeleteStack(serverName) {
  * @param {number} n
  * @returns async sleep
  */
-const sleep = async (n) => {
-  return new Promise((res) => {
+const sleep = async (n: number) => {
+  return new Promise<void>((res) => {
     setTimeout(() => {
       res();
     }, n * 1000);

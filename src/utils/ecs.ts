@@ -5,30 +5,24 @@ import { ECSClient, ListServicesCommand } from '@aws-sdk/client-ecs';
  * @param clusterName
  * @returns service arn
  */
-export async function serviceArn(clusterName) {
+export async function serviceArn(clusterName: string) {
   const client = new ECSClient({ region: process.env.AWS_REGION });
-  return client
-    .send(
-      new ListServicesCommand({
-        cluster: clusterArn(clusterName),
-      }),
-    )
-    .then((res) => {
-      return res.serviceArns?.[0] || '';
-    });
+  return client.send(new ListServicesCommand({ cluster: clusterArn(clusterName) })).then((res) => {
+    return res.serviceArns?.[0] || '';
+  });
 }
 
-export function clusterName(serverName) {
+export function clusterName(serverName: string) {
   return `ezmc-${serverName}-cluster`;
 }
 /**
  * @param serverName
  * @returns arn for this region/account for the given cluster
  */
-export function clusterArn(serverName) {
+export function clusterArn(serverName: string) {
   return `arn:aws:ecs:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT_ID}:cluster/${clusterName(serverName)}`;
 }
 
-export function serviceName(serverName) {
+export function serviceName(serverName: string) {
   return `ezmc-${serverName}-ecs-service`;
 }
