@@ -30,6 +30,7 @@ server ip 168.192.0.1
 | `start`  | Starts a server                                                                                        |
 | `status` | Displays a server's status                                                                             |
 | `stop`   | Stops a server                                                                                         |
+| `help`   | Displays cli help                                                                                      |
 
 ## Options
 
@@ -51,6 +52,8 @@ server ip 168.192.0.1
 AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command. Remove the server entirely with `rm` (after stop has completed).
 
 > Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
+
+Each server is given its own ECS cluster, with one service, running one task -- ez.
 
 ## License
 
