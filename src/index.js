@@ -34,27 +34,7 @@ program
   .command('new')
   .description('spins up a new server')
   .argument('<string>', 'server name. alphanumeric and hyphens only. must start with alpha character')
-  .action(async (serverName) => {
-    if (!serverName || !serverName.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
-      console.error('invalid name format');
-      return;
-    }
-
-    const region = process.env.AWS_REGION;
-    if (!region) {
-      console.error('missing aws region');
-      return;
-    }
-
-    const awsAccountId = process.env.AWS_ACCOUNT_ID;
-    if (!awsAccountId) {
-      console.error('missing aws account id');
-      return;
-    }
-
-    console.log(`creating ${serverName} in ${region}, please wait...`);
-    newServer(serverName);
-  });
+  .action((serverName) => newServer(serverName));
 
 program
   .command('rm')
