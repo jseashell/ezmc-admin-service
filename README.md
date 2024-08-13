@@ -23,7 +23,8 @@ server ip 168.192.0.1
 
 | Command  | Description                                                                                            |
 | :------- | :----------------------------------------------------------------------------------------------------- |
-| `ipaddr` | Displays a server's ip address                                                                         |
+| `cip`    | Copies a server's ip address to the clipboard                                                          |
+| `ip`     | Displays a server's ip address                                                                         |
 | `ls`     | Displays a list of your ezmc servers                                                                   |
 | `new`    | Creates a new server. Wait a few minutes for commands like `ipaddr` or `status` to function.           |
 | `rm`     | Removes a server (cannot be undone). Wait a few minutes after stopping a server to remove it entirely. |

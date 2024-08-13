@@ -42,7 +42,6 @@ export async function newServer(serverName) {
       StackName: `ezmc-${serverName}`,
       Capabilities: [Capability.CAPABILITY_IAM],
       TemplateBody: templateBody,
-      Parameters: {},
     }),
   );
 
@@ -50,21 +49,23 @@ export async function newServer(serverName) {
   let rem = 130 - secondsCounter;
   while (rem > 0) {
     process.stdout.write(`bootstrapping server, ${rem} seconds remaining\r`);
-    const s = await status(serverName);
 
-    if (s?.toLowerCase() == 'running') {
-      await sleep(1);
-      console.log('success!');
-
-      const ip = await ipAddress(serverName);
-      console.log('server ip', ip);
-      break;
-    } else {
-      await sleep(1);
-      secondsCounter++;
+    if (
+      rem < 100 && // give time for the cluster to even spin up before checking status
+      rem % 5 == 0 // don't spam
+    ) {
+      const s = await status(serverName);
+      if (s?.toLowerCase() == 'running') {
+        await sleep(1);
+        console.log('success!');
+        const ip = await ipAddress(serverName);
+        console.log('server ip', ip);
+        break;
+      }
     }
 
     await sleep(1);
+    secondsCounter++;
     rem--;
   }
 }

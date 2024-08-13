@@ -19,7 +19,13 @@ export async function list() {
         .map((cluster) => {
           // Ex: 'arn:aws:ecs:us-east-1:008908697155:cluster/ezmc-server-1-cluster'
           return cluster.split('ezmc-')[1].split('-cluster')[0];
-        })
-        .join('\n');
+        });
+    })
+    .then((arr) => {
+      if (arr?.length > 0) {
+        return arr.join('\n');
+      } else {
+        return 'no servers found';
+      }
     });
 }
