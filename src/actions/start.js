@@ -1,6 +1,6 @@
 import { ECSClient, UpdateServiceCommand } from '@aws-sdk/client-ecs';
 import { stackExists } from '../utils/cfn.js';
-import { buildClusterArn } from '../utils/ecs.js';
+import { clusterArn } from '../utils/ecs.js';
 
 export async function start(serviceName, serverName) {
   if (!stackExists(serverName)) {
@@ -15,7 +15,7 @@ export async function start(serviceName, serverName) {
 
   return new ECSClient({ region: region }).send(
     new UpdateServiceCommand({
-      cluster: buildClusterArn(serverName),
+      cluster: clusterArn(serverName),
       service: serviceName,
       desiredCount: 1,
     }),

@@ -1,6 +1,6 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand, UpdateServiceCommand } from '@aws-sdk/client-ecs';
 import { stackExists } from '../utils/cfn.js';
-import { buildClusterArn, getServiceArn } from '../utils/ecs.js';
+import { clusterArn } from '../utils/ecs.js';
 
 export async function stop(serverName) {
   if (!stackExists(serverName)) {
@@ -17,7 +17,7 @@ export async function stop(serverName) {
 
   await new ECSClient({ region: region }).send(
     new UpdateServiceCommand({
-      cluster: buildClusterArn(serverName),
+      cluster: clusterArn(serverName),
       service: serviceName,
       desiredCount: 0,
     }),
@@ -29,11 +29,11 @@ export async function stop(serverName) {
 const waitForTaskToStop = async (serverName) => {
   console.log(`waiting for ${serverName} to stop`);
 
-  const serviceArn = await getServiceArn(serverName);
+  const serviceArn = await serviceArn(serverName);
   const taskArn = await new ECSClient({ region: process.env.AWS_REGION })
     .send(
       new ListTasksCommand({
-        cluster: buildClusterArn(serverName),
+        cluster: clusterArn(serverName),
         serviceName: serviceArn,
       }),
     )

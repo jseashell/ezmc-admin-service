@@ -5,6 +5,8 @@ import {
   ECSClient,
   PutClusterCapacityProvidersCommand,
 } from '@aws-sdk/client-ecs';
+import { stackName } from '../utils/cfn.js';
+import { clusterName, serviceName } from '../utils/ecs.js';
 
 export async function remove(serverName) {
   const region = process.env.AWS_REGION;
@@ -12,11 +14,9 @@ export async function remove(serverName) {
     throw new Error('Invalid AWS region');
   }
 
-  const clusterName = 'ezmc-' + serverName + '-cluster';
-
   await forceDeleteService(serverName)
     .then(async () => await sleep(5))
-    .then(() => detachCapacityProviders(clusterName))
+    .then(() => detachCapacityProviders(serverName))
     .then(async () => await sleep(5))
     .then(() => forceDeleteStack(serverName));
 
@@ -28,14 +28,11 @@ export async function remove(serverName) {
  */
 async function forceDeleteService(serverName) {
   try {
-    const clusterName = 'ezmc-' + serverName + '-cluster';
-    const serviceName = 'ezmc-' + serverName + '-ecs-service';
-
     const client = new ECSClient({ region: process.env.AWS_REGION });
 
     const describeServiceCommand = new DescribeServicesCommand({
-      cluster: clusterName,
-      services: [serviceName],
+      cluster: clusterName(serverName),
+      services: [serviceName(serverName)],
     });
 
     const describeResponse = await client.send(describeServiceCommand);
@@ -43,8 +40,8 @@ async function forceDeleteService(serverName) {
 
     if (service && service.serviceArn) {
       const deleteServiceCommand = new DeleteServiceCommand({
-        cluster: clusterName,
-        service: serviceName,
+        cluster: clusterName(serverName),
+        service: serviceName(serverName),
         force: true,
       });
 
@@ -55,11 +52,11 @@ async function forceDeleteService(serverName) {
   }
 }
 
-async function detachCapacityProviders(clusterName) {
+async function detachCapacityProviders(serverName) {
   const client = new ECSClient({ region: process.env.AWS_REGION });
   await client.send(
     new PutClusterCapacityProvidersCommand({
-      cluster: clusterName,
+      cluster: clusterName(serverName),
       capacityProviders: [], // none
     }),
   );
@@ -68,7 +65,7 @@ async function detachCapacityProviders(clusterName) {
 async function forceDeleteStack(serverName) {
   return new CloudFormationClient({ region: process.env.AWS_REGION }).send(
     new DeleteStackCommand({
-      StackName: 'ezmc-' + serverName,
+      StackName: stackName(serverName),
       DeletionMode: DeletionMode.FORCE_DELETE_STACK,
     }),
   );

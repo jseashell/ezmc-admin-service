@@ -1,7 +1,7 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCommand } from '@aws-sdk/client-ecs';
 import { stackExists } from '../utils/cfn.js';
-import { buildClusterArn } from '../utils/ecs.js';
+import { clusterArn } from '../utils/ecs.js';
 
 export async function ipAddress(serverName) {
   if (!stackExists(serverName)) {
@@ -18,7 +18,7 @@ export async function ipAddress(serverName) {
   return ecsClient
     .send(
       new ListContainerInstancesCommand({
-        cluster: buildClusterArn(serverName),
+        cluster: clusterArn(serverName),
       }),
     )
     .then((res) => {
@@ -31,7 +31,7 @@ export async function ipAddress(serverName) {
     .then((containerInstanceArn) => {
       return ecsClient.send(
         new DescribeContainerInstancesCommand({
-          cluster: buildClusterArn(serverName),
+          cluster: clusterArn(serverName),
           containerInstances: [containerInstanceArn],
         }),
       );

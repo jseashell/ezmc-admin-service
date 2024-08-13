@@ -1,4 +1,5 @@
 import { ECSClient, ListClustersCommand } from '@aws-sdk/client-ecs';
+import { status } from './status.js';
 
 export async function list() {
   const region = process.env.AWS_REGION;
@@ -6,7 +7,7 @@ export async function list() {
     throw new Error('Invalid AWS region');
   }
 
-  return new ECSClient({
+  const servers = await new ECSClient({
     region: region,
   })
     .send(new ListClustersCommand({}))
@@ -21,11 +22,16 @@ export async function list() {
           return cluster.split('ezmc-')[1].split('-cluster')[0];
         });
     })
-    .then((arr) => {
-      if (arr?.length > 0) {
-        return arr.join('\n');
+    .then((serverNames) => {
+      if (serverNames?.length > 0) {
+        return serverNames.map(async (serverName) => {
+          const s = await status();
+          return `${serverName} (${s})`;
+        });
       } else {
-        return 'no servers found';
+        return ['none found'];
       }
     });
+
+  return (await Promise.all(servers)).join('\n');
 }

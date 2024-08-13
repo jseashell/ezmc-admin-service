@@ -1,9 +1,4 @@
-import {
-  Capability,
-  CloudFormationClient,
-  CreateStackCommand,
-  DescribeStacksCommand,
-} from '@aws-sdk/client-cloudformation';
+import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/client-cloudformation';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { ipAddress } from './ipaddr.js';
@@ -69,29 +64,6 @@ export async function newServer(serverName) {
     rem--;
   }
 }
-
-const stackExists = async (serverName, region) => {
-  try {
-    const client = new CloudFormationClient({ region: region });
-    const response = await client.send(
-      new DescribeStacksCommand({
-        StackName: 'ezmc-' + serverName,
-      }),
-    );
-
-    if (response.Stacks && response.Stacks.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    if (error.name === 'ValidationError' && error.message.includes('does not exist')) {
-      return false;
-    } else {
-      throw error;
-    }
-  }
-};
 
 /**
  * sleeps the given number of seconds

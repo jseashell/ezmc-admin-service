@@ -1,5 +1,9 @@
 import { CloudFormationClient, DescribeStacksCommand } from '@aws-sdk/client-cloudformation';
 
+export function stackName(serverName) {
+  return `ezmc-${serverName}`;
+}
+
 export const stackExists = async (serverName, region) => {
   try {
     const client = new CloudFormationClient({ region: region });
