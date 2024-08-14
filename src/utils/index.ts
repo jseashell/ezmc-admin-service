@@ -1,2 +1,2 @@
-export * from './aws/aws';
-export * from './sleep/sleep';
+export * from './aws/aws.util';
+export * from './sleep/sleep.util';

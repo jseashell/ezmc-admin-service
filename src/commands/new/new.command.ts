@@ -1,25 +1,14 @@
 import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/client-cloudformation';
+import { CacheFactory } from '@cache';
 import { sleep, stackExists } from '@utils';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { ipAddress } from './ipaddr';
-import { status } from './status';
+import { ipAddress } from '../ipaddr/ipaddr.command';
+import { status } from '../status/status.command';
 
 export async function newServer(serverName: string) {
   if (!serverName || !serverName.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
     console.error('invalid name format');
-    return;
-  }
-
-  const region = process.env.AWS_REGION;
-  if (!region) {
-    console.error('missing aws region');
-    return;
-  }
-
-  const awsAccountId = process.env.AWS_ACCOUNT_ID;
-  if (!awsAccountId) {
-    console.error('missing aws account id');
     return;
   }
 
@@ -32,7 +21,8 @@ export async function newServer(serverName: string) {
   const path = resolve('./src/templates/default.yml');
   const templateBody = readFileSync(path).toString();
 
-  const client = new CloudFormationClient({ region: region });
+  const cache = await CacheFactory.getInstance();
+  const client = new CloudFormationClient({ region: cache.aws.region });
   client.send(
     new CreateStackCommand({
       StackName: `ezmc-${serverName}`,

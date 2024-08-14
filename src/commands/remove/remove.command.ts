@@ -5,14 +5,10 @@ import {
   ECSClient,
   PutClusterCapacityProvidersCommand,
 } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 import { clusterName, serviceName, sleep, stackName } from '@utils';
 
 export async function remove(serverName: string) {
-  const region = process.env.AWS_REGION;
-  if (!region) {
-    throw new Error('Invalid AWS region');
-  }
-
   await forceDeleteService(serverName)
     .then(async () => await sleep(5))
     .then(() => detachCapacityProviders(serverName))
@@ -27,7 +23,8 @@ export async function remove(serverName: string) {
  */
 async function forceDeleteService(serverName: string) {
   try {
-    const client = new ECSClient({ region: process.env.AWS_REGION });
+    const cache = await CacheFactory.getInstance();
+    const client = new ECSClient({ region: cache.aws.region });
 
     const describeServiceCommand = new DescribeServicesCommand({
       cluster: clusterName(serverName),
@@ -52,7 +49,8 @@ async function forceDeleteService(serverName: string) {
 }
 
 async function detachCapacityProviders(serverName: string) {
-  const client = new ECSClient({ region: process.env.AWS_REGION });
+  const cache = await CacheFactory.getInstance();
+  const client = new ECSClient({ region: cache.aws.region });
   await client.send(
     new PutClusterCapacityProvidersCommand({
       cluster: clusterName(serverName),
@@ -63,7 +61,8 @@ async function detachCapacityProviders(serverName: string) {
 }
 
 async function forceDeleteStack(serverName: string) {
-  return new CloudFormationClient({ region: process.env.AWS_REGION }).send(
+  const cache = await CacheFactory.getInstance();
+  return new CloudFormationClient({ region: cache.aws.region }).send(
     new DeleteStackCommand({
       StackName: stackName(serverName),
       DeletionMode: DeletionMode.FORCE_DELETE_STACK,

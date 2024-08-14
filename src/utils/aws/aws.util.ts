@@ -1,5 +1,6 @@
 import { CloudFormationClient, DescribeStacksCommand } from '@aws-sdk/client-cloudformation';
 import { ECSClient, ListServicesCommand } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 
 export function stackName(serverName: string) {
   return `ezmc-${serverName}`;
@@ -11,8 +12,10 @@ export function stackName(serverName: string) {
  * @returns service arn
  */
 export async function serviceArn(clusterName: string) {
-  const client = new ECSClient({ region: process.env.AWS_REGION });
-  return client.send(new ListServicesCommand({ cluster: clusterArn(clusterName) })).then((res) => {
+  const cache = await CacheFactory.getInstance();
+  const client = new ECSClient({ region: cache.aws.region });
+  const arn = await clusterArn(clusterName);
+  return client.send(new ListServicesCommand({ cluster: arn })).then((res) => {
     return res.serviceArns?.[0] || '';
   });
 }
@@ -25,8 +28,9 @@ export function clusterName(serverName: string) {
  * @param serverName
  * @returns arn for this region/account for the given cluster
  */
-export function clusterArn(serverName: string) {
-  return `arn:aws:ecs:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT_ID}:cluster/${clusterName(serverName)}`;
+export async function clusterArn(serverName: string) {
+  const cache = await CacheFactory.getInstance();
+  return `arn:aws:ecs:${cache.aws.region}:${cache.aws.accountId}:cluster/${clusterName(serverName)}`;
 }
 
 export function serviceName(serverName: string) {
@@ -35,7 +39,8 @@ export function serviceName(serverName: string) {
 
 export const stackExists = async (serverName: string) => {
   try {
-    const client = new CloudFormationClient({ region: process.env.AWS_REGION });
+    const cache = await CacheFactory.getInstance();
+    const client = new CloudFormationClient({ region: cache.aws.region });
     const response = await client.send(
       new DescribeStacksCommand({
         StackName: 'ezmc-' + serverName,

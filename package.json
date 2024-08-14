@@ -21,6 +21,7 @@
     "@aws-sdk/client-ec2": "^3.627.0",
     "@aws-sdk/client-ecs": "^3.624.0",
     "@aws-sdk/client-s3": "^3.627.0",
+    "@aws-sdk/client-sts": "^3.629.0",
     "commander": "^12.1.0",
     "copy-to-clipboard": "^3.3.3",
     "dotenv": "^16.4.5",

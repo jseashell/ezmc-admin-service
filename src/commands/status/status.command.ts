@@ -1,4 +1,5 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 import { clusterArn, serviceName, stackExists } from '@utils';
 
 export async function status(serverName: string) {
@@ -7,16 +8,10 @@ export async function status(serverName: string) {
     return;
   }
 
-  const region = process.env.AWS_REGION;
-  if (!region) {
-    throw new Error('Invalid AWS region');
-  }
-
-  const client = new ECSClient({ region: region });
-
-  const res = await client.send(
-    new ListTasksCommand({ cluster: clusterArn(serverName), serviceName: serviceName(serverName) }),
-  );
+  const cache = await CacheFactory.getInstance();
+  const client = new ECSClient({ region: cache.aws.region });
+  const arn = await clusterArn(serverName);
+  const res = await client.send(new ListTasksCommand({ cluster: arn, serviceName: serviceName(serverName) }));
 
   if (res?.taskArns?.length == 0) {
     return 'STOPPED';
@@ -25,9 +20,10 @@ export async function status(serverName: string) {
   const taskArn = res?.taskArns?.[0] || '';
 
   try {
+    const arn = await clusterArn(serverName);
     const res = await client.send(
       new DescribeTasksCommand({
-        cluster: clusterArn(serverName),
+        cluster: arn,
         tasks: [taskArn],
       }),
     );

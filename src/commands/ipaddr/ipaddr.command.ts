@@ -1,5 +1,6 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCommand } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 import { clusterArn, stackExists } from '@utils';
 
 export async function ipAddress(serverName: string): Promise<string> {
@@ -8,16 +9,14 @@ export async function ipAddress(serverName: string): Promise<string> {
     return '';
   }
 
-  const region = process.env.AWS_REGION;
-  if (!region) {
-    throw new Error('Invalid AWS region');
-  }
-
+  const cache = await CacheFactory.getInstance();
+  const region = cache.aws.region;
+  const cluster = await clusterArn(serverName);
   const ecsClient = new ECSClient({ region: region });
   return ecsClient
     .send(
       new ListContainerInstancesCommand({
-        cluster: clusterArn(serverName),
+        cluster: cluster,
       }),
     )
     .then((res) => {
@@ -27,10 +26,11 @@ export async function ipAddress(serverName: string): Promise<string> {
         return Promise.reject(`No container instances for "${serverName}"`);
       }
     })
-    .then((containerInstanceArn) => {
+    .then(async (containerInstanceArn) => {
+      const cluster = await clusterArn(serverName);
       return ecsClient.send(
         new DescribeContainerInstancesCommand({
-          cluster: clusterArn(serverName),
+          cluster: cluster,
           containerInstances: [containerInstanceArn],
         }),
       );
@@ -42,9 +42,11 @@ export async function ipAddress(serverName: string): Promise<string> {
         return Promise.reject('Unable to describe a container instance');
       }
     })
-    .then((containerInstance) => {
+    .then(async (containerInstance) => {
       const instanceId = containerInstance.ec2InstanceId || '';
-      const ec2Client = new EC2Client({ region: process.env.AWS_REGION });
+
+      const cache = await CacheFactory.getInstance();
+      const ec2Client = new EC2Client({ region: cache.aws.region });
       return ec2Client.send(
         new DescribeInstancesCommand({
           Filters: [

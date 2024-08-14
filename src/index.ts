@@ -2,15 +2,9 @@
 
 import 'dotenv/config';
 
+import { copyIpAddress, ipAddress, list, newServer, remove, start, status, stop } from '@commands';
 import { program } from 'commander';
-import { copyIpAddress } from './actions/copy-ipaddr';
-import { ipAddress } from './actions/ipaddr';
-import { list } from './actions/list';
-import { newServer } from './actions/new';
-import { remove } from './actions/remove';
-import { start } from './actions/start';
-import { status } from './actions/status';
-import { stop } from './actions/stop';
+import { CacheFactory } from './cache/cache.factory';
 
 program.name('ezmc').description('CLI for self-hosting a Minecraft Java server with AWS ECS.').version('0.1.0');
 
@@ -65,4 +59,6 @@ program.configureOutput({
   outputError: (str, write) => write(`\x1b[31m${str}\x1b[0m`),
 });
 
-program.parse();
+CacheFactory.getInstance().then(() => {
+  program.parse();
+});

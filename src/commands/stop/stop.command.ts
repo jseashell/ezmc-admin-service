@@ -1,9 +1,11 @@
 import { ECSClient, ListTasksCommand, StopTaskCommand } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 import { clusterName } from '@utils';
 
 export async function stop(serverName: string) {
   const cluster = clusterName(serverName);
-  const client = new ECSClient({ region: process.env.AWS_REGION });
+  const cache = await CacheFactory.getInstance();
+  const client = new ECSClient({ region: cache.aws.region });
 
   try {
     const res = await client.send(new ListTasksCommand({ cluster: cluster }));

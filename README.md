@@ -50,11 +50,13 @@ ezmc new s1
 
 ## Infrastructure
 
-AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command. Remove the server entirely with `rm` (after stop has completed).
+Resources are provisioned using your current AWS CLI profile, falling back to the default profile, and lastly falling back to `us-east-1` as a default region.
+
+AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command or stop and remove the server entirely with `rm`.
 
 > Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
 
-Each server is given its own ECS cluster, with one service, running one task -- ez.
+Each server is given its own ECS cluster, with one service, running one task -- keep it ez.
 
 ## License
 

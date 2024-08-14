@@ -1,4 +1,5 @@
 import { CreateServiceCommand, ECSClient } from '@aws-sdk/client-ecs';
+import { CacheFactory } from '@cache';
 import { clusterName, serviceName, stackExists } from '@utils';
 
 export async function start(serverName: string) {
@@ -7,14 +8,10 @@ export async function start(serverName: string) {
     return;
   }
 
-  const region = process.env.AWS_REGION;
-  if (!region) {
-    throw new Error('Invalid AWS region');
-  }
-
   // TODO create task?
 
-  new ECSClient({ region: region }).send(
+  const cache = await CacheFactory.getInstance();
+  new ECSClient({ region: cache.aws.region }).send(
     new CreateServiceCommand({
       cluster: clusterName(serverName),
       serviceName: serviceName(serverName),
