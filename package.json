@@ -1,6 +1,6 @@
 {
   "name": "ezmc-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI for self-hosting a Minecraft Java server with AWS ECS",
   "keywords": [
     "Minecraft server",
@@ -10,7 +10,8 @@
   "author": "John Schellinger",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf bin && npx tsc",
+    "clean": "rm -rf bin && npm unlink ezmc",
+    "build": "npm run clean && npx tsc && npm link && chmod +x bin/*",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
   },
   "dependencies": {

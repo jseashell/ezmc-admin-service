@@ -13,6 +13,8 @@ export async function start(serverName: string) {
     throw new Error('Invalid AWS region');
   }
 
+  // TODO create task?
+
   new ECSClient({ region: region }).send(
     new CreateServiceCommand({
       cluster: clusterName(serverName),

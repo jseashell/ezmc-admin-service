@@ -1,6 +1,6 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
 import { stackExists } from '../utils/cfn';
-import { clusterArn, serviceArn } from '../utils/ecs';
+import { clusterArn, serviceName } from '../utils/ecs';
 
 export async function status(serverName: string) {
   if (!stackExists(serverName)) {
@@ -15,14 +15,8 @@ export async function status(serverName: string) {
 
   const client = new ECSClient({ region: region });
 
-  const service = await serviceArn(serverName);
-
-  console.log('d', service);
   const res = await client.send(
-    new ListTasksCommand({
-      cluster: clusterArn(serverName),
-      serviceName: service,
-    }),
+    new ListTasksCommand({ cluster: clusterArn(serverName), serviceName: serviceName(serverName) }),
   );
 
   if (res?.taskArns?.length == 0) {
@@ -39,7 +33,7 @@ export async function status(serverName: string) {
       }),
     );
 
-    return res?.tasks?.[0]?.containers?.[0]?.lastStatus || 'LAUNCHING';
+    return res?.tasks?.[0]?.lastStatus || 'LAUNCHING';
   } catch (err) {
     return 'STOPPED';
   }

@@ -1,5 +1,4 @@
 import { ECSClient, ListClustersCommand } from '@aws-sdk/client-ecs';
-import { status } from './status';
 
 export async function list() {
   const region = process.env.AWS_REGION;
@@ -21,14 +20,6 @@ export async function list() {
           // Ex: 'arn:aws:ecs:us-east-1:008908697155:cluster/ezmc-server-1-cluster'
           return cluster.split('ezmc-')[1].split('-cluster')[0];
         });
-    })
-    .then((serverNames) => {
-      return (
-        serverNames?.map(async (serverName) => {
-          const s = await status(serverName);
-          return `${serverName} (${s})`;
-        }) || ['none found']
-      );
     });
 
   return (await Promise.all(servers)).join('\n');

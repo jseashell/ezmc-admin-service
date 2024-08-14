@@ -30,7 +30,6 @@ async function forceDeleteService(serverName: string) {
   try {
     const client = new ECSClient({ region: process.env.AWS_REGION });
 
-    console.log('a', serverName);
     const describeServiceCommand = new DescribeServicesCommand({
       cluster: clusterName(serverName),
       services: [serviceName(serverName)],
@@ -39,7 +38,6 @@ async function forceDeleteService(serverName: string) {
     const describeResponse = await client.send(describeServiceCommand);
     const service = describeResponse.services?.[0];
 
-    console.log('c', serverName);
     if (service && service.serviceArn) {
       const deleteServiceCommand = new DeleteServiceCommand({
         cluster: clusterName(serverName),
