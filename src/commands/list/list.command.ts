@@ -13,7 +13,8 @@ export async function list() {
       .map((cluster) => {
         // Ex: 'arn:aws:ecs:us-east-1:008908697155:cluster/ezmc-server-1-cluster'
         return cluster.split('ezmc-')[1].split('-cluster')[0];
-      });
+      })
+      .sort((a, b) => a.localeCompare(b));
   });
 
   return (await Promise.all(servers)).join('\n');
