@@ -1,11 +1,11 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
-import { clusterArn, serviceName, stackExists } from '@utils';
+import { clusterArn, serviceExists, serviceName } from '@utils';
 
-export async function status(serverName: string) {
-  if (!stackExists(serverName)) {
+export async function status(serverName: string): Promise<string> {
+  if ((await serviceExists(serverName)) == false) {
     console.log(`${serverName} does not exist`);
-    return;
+    return '';
   }
 
   const cache = await CacheFactory.getInstance();

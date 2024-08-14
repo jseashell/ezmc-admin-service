@@ -1,5 +1,5 @@
 import { CloudFormationClient, DescribeStacksCommand } from '@aws-sdk/client-cloudformation';
-import { ECSClient, ListServicesCommand } from '@aws-sdk/client-ecs';
+import { DescribeServicesCommand, ECSClient, ListServicesCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
 
 export function stackName(serverName: string) {
@@ -60,6 +60,19 @@ export const stackExists = async (serverName: string) => {
     }
   }
 };
+
+export async function serviceExists(serverName) {
+  const cache = await CacheFactory.getInstance();
+  const client = new ECSClient({ region: cache.aws.region });
+  return client
+    .send(
+      new DescribeServicesCommand({
+        cluster: clusterName(serverName),
+        services: [serviceName(serverName)],
+      }),
+    )
+    .then((res) => res?.services?.length > 0);
+}
 
 const checkStackStatus = async (stackName: string) => {
   const client = new CloudFormationClient({ region: 'us-east-1' });
