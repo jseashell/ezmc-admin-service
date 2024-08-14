@@ -74,7 +74,7 @@ export async function serviceExists(serverName) {
     .then((res) => res?.services?.length > 0);
 }
 
-const checkStackStatus = async (stackName: string) => {
+export const checkStackStatus = async (stackName: string) => {
   const client = new CloudFormationClient({ region: 'us-east-1' });
 
   try {
@@ -93,12 +93,7 @@ const checkStackStatus = async (stackName: string) => {
         'UPDATE_ROLLBACK_COMPLETE',
       ];
 
-      if (stackStatus === 'DELETE_FAILED' || rollbackStates.includes(stackStatus)) {
-        return stackStatus;
-        // Handle the error or rollback accordingly
-      } else {
-        return 'HEALTHY';
-      }
+      return stackStatus;
     } else {
       return 'UNKNOWN';
     }

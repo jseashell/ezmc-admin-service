@@ -1,11 +1,16 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
-import { clusterArn, serviceExists, serviceName } from '@utils';
+import { checkStackStatus, clusterArn, serviceExists, serviceName } from '@utils';
 
 export async function status(serverName: string): Promise<string> {
-  if ((await serviceExists(serverName)) == false) {
-    console.log(`${serverName} does not exist`);
-    return '';
+  const stackStatus = await checkStackStatus(serverName);
+  if (stackStatus.toLowerCase() != 'update_complete' || stackStatus.toLowerCase() != 'create_complete') {
+    return stackStatus.toLowerCase();
+  }
+
+  const exists = await serviceExists(serverName);
+  if (!exists) {
+    return 'stopped';
   }
 
   const cache = await CacheFactory.getInstance();
@@ -14,7 +19,7 @@ export async function status(serverName: string): Promise<string> {
   const res = await client.send(new ListTasksCommand({ cluster: arn, serviceName: serviceName(serverName) }));
 
   if (res?.taskArns?.length == 0) {
-    return 'STOPPED';
+    return 'stopped';
   }
 
   const taskArn = res?.taskArns?.[0] || '';
@@ -30,6 +35,6 @@ export async function status(serverName: string): Promise<string> {
 
     return res?.tasks?.[0]?.lastStatus || 'LAUNCHING';
   } catch (err) {
-    return 'STOPPED';
+    return 'stopped';
   }
 }

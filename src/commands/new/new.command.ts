@@ -32,13 +32,17 @@ export async function newServer(serverName: string) {
   );
 
   let secondsCounter = 0;
-  let rem = 130 - secondsCounter;
+  let rem = 300 - secondsCounter;
   while (rem > 0) {
-    process.stdout.write(`bootstrapping server, ${rem} seconds remaining\r`);
+    const minutes = Math.floor(rem / 60);
+    const seconds = rem % 60;
+    const formattedMinutes = String(minutes);
+    const formattedSeconds = String(seconds).padStart(2, '0');
+    process.stdout.write(`bootstrapping server, ${formattedMinutes}:${formattedSeconds} remaining\r`);
 
     if (
-      rem < 100 && // give time for the cluster to even spin up before checking status
-      rem % 5 == 0 // don't spam
+      rem < 120 && // give time for the cluster to even spin up before checking status
+      rem % 15 == 0 // don't spam
     ) {
       const s = await status(serverName);
       if (s?.toLowerCase() == 'running') {

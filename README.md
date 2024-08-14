@@ -1,6 +1,6 @@
 # EZMC CLI
 
-Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This CLI is a wrapper around [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image and the AWS SDK that contains useful commands for orchestrating containers without logging in or using the AWS directly (after initial account creation and billing setup).
+Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This CLI is a wrapper around the [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing) Cloudformation template and the AWS SDK that contains useful commands for orchestrating containers without logging in or using the AWS directly (after initial account creation and billing setup).
 
 ## Usage
 
