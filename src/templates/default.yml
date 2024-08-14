@@ -104,8 +104,8 @@ Parameters:
     Default: ''
   MaxPlayers:
     Type: Number
-    Description: Max number of players that can connect simultaneously (default 20)
-    Default: 20
+    Description: Max number of players that can connect simultaneously (default 10)
+    Default: 10
   ViewDistance:
     Type: Number
     Description: Max view radius (in chunks) the server will send to the client (default 10)

@@ -39,14 +39,13 @@ ezmc new s1
 
 | Option        |  Value   |
 | :------------ | :------: |
-| Max players   |    20    |
+| Max players   |    10    |
 | Difficulty    |  Normal  |
 | View Distance |    10    |
 | Game Mode     | Survival |
 | Level Type    | Default  |
 | Seed          |    -     |
 | Admin Players |    -     |
-| Op List       |    -     |
 
 ## Infrastructure
 
@@ -56,7 +55,7 @@ AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instanc
 
 > Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
 
-Each "server" is given its own networking stack and ECS cluster for simple clean up -- keeps it ez.
+Each "server" is given its own networking stack and ECS cluster for simple clean up -- keeps it ez. By default, your AWS account will be limited to 5 VPCs. With the default VPC, and assuming zero other provisioned resources, that means you can have a maximum of 4 servers operating simulateously.
 
 ## License
 
