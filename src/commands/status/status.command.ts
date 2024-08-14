@@ -33,7 +33,7 @@ export async function status(serverName: string): Promise<string> {
       }),
     );
 
-    return res?.tasks?.[0]?.lastStatus || 'LAUNCHING';
+    return res?.tasks?.[0]?.lastStatus?.toLowerCase() || 'launching';
   } catch (err) {
     return 'stopped';
   }
