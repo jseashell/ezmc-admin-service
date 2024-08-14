@@ -5,7 +5,10 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "outDir": "bin/",
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "@utils": ["src/utils"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]

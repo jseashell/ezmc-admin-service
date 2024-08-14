@@ -1,6 +1,5 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
-import { stackExists } from '../utils/cfn';
-import { clusterArn, serviceName } from '../utils/ecs';
+import { clusterArn, serviceName, stackExists } from '@utils';
 
 export async function status(serverName: string) {
   if (!stackExists(serverName)) {

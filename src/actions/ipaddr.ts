@@ -1,7 +1,6 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
 import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCommand } from '@aws-sdk/client-ecs';
-import { stackExists } from '../utils/cfn';
-import { clusterArn } from '../utils/ecs';
+import { clusterArn, stackExists } from '@utils';
 
 export async function ipAddress(serverName: string): Promise<string> {
   if (!stackExists(serverName)) {

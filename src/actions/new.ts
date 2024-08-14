@@ -1,7 +1,7 @@
 import { Capability, CloudFormationClient, CreateStackCommand } from '@aws-sdk/client-cloudformation';
+import { sleep, stackExists } from '@utils';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { stackExists } from '../utils/cfn';
 import { ipAddress } from './ipaddr';
 import { status } from './status';
 
@@ -65,16 +65,3 @@ export async function newServer(serverName: string) {
     rem--;
   }
 }
-
-/**
- * sleeps the given number of seconds
- * @param {number} n
- * @returns async sleep
- */
-const sleep = async (n: number) => {
-  return new Promise<void>((res) => {
-    setTimeout(() => {
-      res();
-    }, n * 1000);
-  });
-};

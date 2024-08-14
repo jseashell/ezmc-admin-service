@@ -1,6 +1,5 @@
 import { CreateServiceCommand, ECSClient } from '@aws-sdk/client-ecs';
-import { stackExists } from '../utils/cfn';
-import { clusterName, serviceName } from '../utils/ecs';
+import { clusterName, serviceName, stackExists } from '@utils';
 
 export async function start(serverName: string) {
   if (!stackExists(serverName)) {

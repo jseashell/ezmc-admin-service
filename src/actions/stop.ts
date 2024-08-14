@@ -1,5 +1,5 @@
 import { ECSClient, ListTasksCommand, StopTaskCommand } from '@aws-sdk/client-ecs';
-import { clusterName } from '../utils/ecs';
+import { clusterName } from '@utils';
 
 export async function stop(serverName: string) {
   const cluster = clusterName(serverName);

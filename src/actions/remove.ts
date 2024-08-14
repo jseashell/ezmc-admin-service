@@ -5,8 +5,7 @@ import {
   ECSClient,
   PutClusterCapacityProvidersCommand,
 } from '@aws-sdk/client-ecs';
-import { stackName } from '../utils/cfn';
-import { clusterName, serviceName } from '../utils/ecs';
+import { clusterName, serviceName, sleep, stackName } from '@utils';
 
 export async function remove(serverName: string) {
   const region = process.env.AWS_REGION;
@@ -71,16 +70,3 @@ async function forceDeleteStack(serverName: string) {
     }),
   );
 }
-
-/**
- * sleeps the given number of seconds
- * @param {number} n
- * @returns async sleep
- */
-const sleep = async (n: number) => {
-  return new Promise<void>((res) => {
-    setTimeout(() => {
-      res();
-    }, n * 1000);
-  });
-};
