@@ -11,8 +11,9 @@
   "author": "John Schellinger",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf bin && npm unlink ezmc",
-    "build": "npm run clean && npx tsc && npm link && chmod +x bin/*",
+    "clean": "rm -rf bin",
+    "build": "npm run clean && ncc build src/index.ts -o bin",
+    "link": " npm unlink ezmc && npm link && chmod +x bin/*",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.2.0",
+    "@vercel/ncc": "^0.38.1",
     "prettier": "^2.8.3",
     "typescript": "^5.5.4"
   },

@@ -3,9 +3,10 @@
     "baseUrl": ".",
     "module": "commonjs",
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "outDir": "bin/",
     "sourceMap": true,
-    "target": "es2016",
+    "target": "es2015",
     "paths": {
       "@utils": ["src/utils"]
     }
