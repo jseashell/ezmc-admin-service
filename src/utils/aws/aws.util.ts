@@ -93,11 +93,11 @@ export const checkStackStatus = async (stackName: string) => {
         'UPDATE_ROLLBACK_COMPLETE',
       ];
 
-      return stackStatus;
+      return stackStatus.toLowerCase();
     } else {
-      return 'UNKNOWN';
+      return 'unknown';
     }
   } catch (error) {
-    return 'UNKNOWN';
+    return 'unknown';
   }
 };

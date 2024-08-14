@@ -1,4 +1,4 @@
-import { CloudFormationClient, DeleteStackCommand, DeletionMode } from '@aws-sdk/client-cloudformation';
+import { CloudFormationClient, DeleteStackCommand } from '@aws-sdk/client-cloudformation';
 import {
   DeleteServiceCommand,
   DescribeServicesCommand,
@@ -13,7 +13,7 @@ export async function remove(serverName: string) {
     .then(async () => await sleep(5))
     .then(() => detachCapacityProviders(serverName))
     .then(async () => await sleep(5))
-    .then(() => forceDeleteStack(serverName));
+    .then(() => deleteStack(serverName));
 
   console.log('success!');
 }
@@ -60,12 +60,11 @@ async function detachCapacityProviders(serverName: string) {
   );
 }
 
-async function forceDeleteStack(serverName: string) {
+async function deleteStack(serverName: string) {
   const cache = await CacheFactory.getInstance();
   return new CloudFormationClient({ region: cache.aws.region }).send(
     new DeleteStackCommand({
       StackName: stackName(serverName),
-      DeletionMode: DeletionMode.FORCE_DELETE_STACK,
     }),
   );
 }
