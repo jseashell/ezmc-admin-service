@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "baseUrl": ".",
     "module": "commonjs",
     "esModuleInterop": true,
-    "baseUrl": ".",
     "outDir": "bin/",
     "sourceMap": true,
+    "target": "es2016",
     "paths": {
       "@utils": ["src/utils"]
     }

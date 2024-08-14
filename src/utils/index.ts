@@ -1,3 +1,2 @@
-export * from './cfn/cfn';
-export * from './ecs/ecs';
+export * from './aws/aws';
 export * from './sleep/sleep';
