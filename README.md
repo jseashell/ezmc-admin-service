@@ -1,6 +1,6 @@
-# EZMC Game Server
+# EZMC CLI
 
-Server management CLI for self-hosting Minecraft Java Edition in your AWS account. This CLI is a wrapper around [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image and the AWS SDK that contains useful commands for managing resources without logging in or using the AWS directly (after initial account creation and billing setup).
+Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This CLI is a wrapper around [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image and the AWS SDK that contains useful commands for orchestrating containers without logging in or using the AWS directly (after initial account creation and billing setup).
 
 ## Usage
 
@@ -9,12 +9,12 @@ Server management CLI for self-hosting Minecraft Java Edition in your AWS accoun
 git clone git@github.com:jseashell/ezmc-cli.git
 # install dependencies
 npm install
-# link to your global packages to enable
-npm link
+# build the project
+npm run build
 # create your server
 ezmc new s1
-# after a short wait...direct connect
-server ip 168.192.0.1
+# after a short wait you'll see:
+# server ip 168.192.0.1
 ```
 
 > Requires Node.js v20+
