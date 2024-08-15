@@ -74,23 +74,28 @@ export async function serviceExists(serverName) {
     .then((res) => res?.services?.length > 0);
 }
 
-export const checkStackStatus = async (serverName: string) => {
+export const stack = async (serverName: string) => {
   const cache = await CacheFactory.getInstance();
   const client = new CloudFormationClient({ region: cache.aws.region });
 
-  try {
-    const command = new DescribeStacksCommand({ StackName: stackName(serverName) });
-    const response = await client.send(command);
+  const command = new DescribeStacksCommand({ StackName: stackName(serverName) });
+  const response = await client.send(command);
 
-    if (response.Stacks && response.Stacks.length > 0) {
-      const stackStatus = response.Stacks[0].StackStatus || 'UNKNOWN';
-      return stackStatus.toLowerCase();
-    } else {
-      return 'unknown';
-    }
-  } catch (error) {
-    return 'unknown';
+  if (response.Stacks && response.Stacks.length > 0) {
+    return response.Stacks[0];
+  } else {
+    throw new Error(`${serverName} not found`);
   }
+};
+
+export const stackStatus = async (serverName: string): Promise<string> => {
+  return stack(serverName)
+    .then((stack) => {
+      return stack?.StackStatus?.toLowerCase() || 'unknown';
+    })
+    .catch(() => {
+      return 'unknown';
+    });
 };
 
 export async function getStackParameter(serverName: string, key: string) {

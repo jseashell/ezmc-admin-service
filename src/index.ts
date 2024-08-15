@@ -2,7 +2,7 @@
 
 import 'dotenv/config';
 
-import { addop, copyIpAddress, ipaddr, list, newServer, rm, rmop, start, status, stop } from '@commands';
+import { addop, copyIpAddress, getParams, ipaddr, list, newServer, rm, rmop, start, status, stop } from '@commands';
 import { program } from 'commander';
 import { CacheFactory } from './cache/cache.factory';
 
@@ -44,6 +44,27 @@ program
   .description('spins up a new server')
   .argument('<string>', 'server name. alphanumeric and hyphens only. must start with alpha character')
   .action((serverName) => newServer(serverName));
+
+program
+  .command('params')
+  .description('get/set server parameters')
+  .argument(`<get|set>`, 'action to take')
+  .argument('<string>', 'server name')
+  .option('-a, --admin <string>', 'list of admin player names. comma-delimited, no spaces')
+  .option('-d, --difficulty [peaceful|easy|normal|hard]', 'the game difficulty')
+  .option('-g, --gamemode [creative|survival|adventue|spectator]')
+  .option('-m, --maxplayers <number>', 'the maximum amount of simultaneous players')
+  .option('-r, --ram, --mem [1G|2G|4G|8G]', 'amount of memory to allocate to the jvm')
+  .option('-s, --state [running|stopped]', 'server state')
+  .option('-v, --viewdist <number>', 'view distance')
+  .option('-w, --whitelist <string>', 'list of whitelisted player names. comma-delimited, no spaces')
+  .action((action, serverName, options) => {
+    if (action == 'get') {
+      getParams(serverName);
+    } else if (action == 'set') {
+      console.log(options);
+    }
+  });
 
 program
   .command('rm')

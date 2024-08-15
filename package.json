@@ -1,6 +1,6 @@
 {
   "name": "ezmc-cli",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "CLI for self-hosting a Minecraft Java server with AWS Elastic Container Service",
   "keywords": [
     "Minecraft server",

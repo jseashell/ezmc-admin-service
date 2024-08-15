@@ -1,11 +1,11 @@
 import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
-import { checkStackStatus, clusterArn, serviceExists, serviceName } from '@utils';
+import { clusterArn, serviceExists, serviceName, stackStatus } from '@utils';
 
 export async function status(serverName: string): Promise<string> {
-  const stackStatus = await checkStackStatus(serverName);
-  if (stackStatus.toLowerCase() != 'update_complete' && stackStatus.toLowerCase() != 'create_complete') {
-    return stackStatus.toLowerCase();
+  const status = await stackStatus(serverName);
+  if (status.toLowerCase() != 'update_complete' && status.toLowerCase() != 'create_complete') {
+    return status.toLowerCase();
   }
 
   const exists = await serviceExists(serverName);
