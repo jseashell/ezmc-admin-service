@@ -58,6 +58,10 @@ program
   .option('-s, --state [running|stopped]', 'server state')
   .option('-v, --viewdist <number>', 'view distance')
   .option('-w, --whitelist <string>', 'list of whitelisted player names. comma-delimited, no spaces')
+  .option(
+    '-z, --timezone <string>',
+    "the server's timezone. use the canonical name of the format, e.g. America/New_York",
+  )
   .action((action, serverName, options) => {
     if (action == 'get') {
       getParams(serverName);

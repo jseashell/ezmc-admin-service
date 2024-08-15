@@ -1,17 +1,21 @@
 export enum ParamsKey {
   // Shouldn't set these after creating the server
-  MINECRAFT_TYPE_TAG = 'MinecraftTypeTag',
   LEVEL_TYPE = 'LevelType',
+  INSTANCE_TYPE = 'InstanceType',
+  MINECRAFT_IMAGE_TAG = 'MinecraftImageTag',
+  MINECRAFT_TYPE_TAG = 'MinecraftTypeTag',
   MINECRAFT_VERSION = 'MinecraftVersion',
   SEED = 'Seed',
 
   // These are safe to stop the server and update
-  SERVER_STATE = 'ServerState',
   ADMINS = 'AdminPlayerNames',
   DIFFICULTY = 'Difficulty',
-  WHITELIST = 'Whitelist',
+  GAMEMODE = 'GameMode',
   MEMORY = 'Memory',
   MAX_PLAYERS = 'MaxPlayers',
+  SERVER_STATE = 'ServerState',
+  SPOT_PRICE = 'SpotPrice',
+  TIMEZONE = 'Timezone',
   VIEW_DIST = 'ViewDistance',
-  GAMEMODE = 'GameMode',
+  WHITELIST = 'Whitelist',
 }
