@@ -21,24 +21,22 @@ ezmc new s1
 
 ## Commands
 
-| Command  | Description                                                                                            |
-| :------- | :----------------------------------------------------------------------------------------------------- |
-| `addop`  | Adds a player to the admin list. Stop your server first!                                               |
-| `cip`    | Copies a server's ip address to the clipboard                                                          |
-| `ip`     | Displays a server's ip address                                                                         |
-| `ls`     | Displays a list of your ezmc servers                                                                   |
-| `maxp`   | Removes a player from the admin list. Stop your server first!                                          |
-| `new`    | Creates a new server. Wait a few minutes for commands like `ipaddr` or `status` to function.           |
-| `rm`     | Removes a server (cannot be undone). Wait a few minutes after stopping a server to remove it entirely. |
-| `rmop`   | Removes a player from the admin list. Stop your server first!                                          |
-| `start`  | Starts a server                                                                                        |
-| `status` | Displays a server's status                                                                             |
-| `stop`   | Stops a server                                                                                         |
-| `help`   | Displays cli help                                                                                      |
+| Command  | Description                                                                  |
+| :------- | :--------------------------------------------------------------------------- |
+| `cip`    | Copies a server's ip address to the clipboard.                               |
+| `ip`     | Displays a server's ip address.                                              |
+| `ls`     | Lists your servers.                                                          |
+| `new`    | Creates a new server. Wait 5 minutes for commands like `ipaddr` or `status`. |
+| `params` | Get/set server parameters.                                                   |
+| `rm`     | Removes a server (cannot be undone).                                         |
+| `start`  | Starts a server.                                                             |
+| `status` | Displays a server's status.                                                  |
+| `stop`   | Stops a server.                                                              |
+| `help`   | Displays help.                                                               |
 
 ## Options
 
-### Defaults
+### Notable Defaults
 
 | Option        |  Value   |
 | :------------ | :------: |
@@ -47,8 +45,6 @@ ezmc new s1
 | View Distance |    10    |
 | Game Mode     | Survival |
 | Level Type    | Default  |
-| Seed          |    -     |
-| Admin Players |    -     |
 
 ## Infrastructure
 
@@ -59,6 +55,28 @@ AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instanc
 > Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
 
 Each "server" is given its own networking stack and ECS cluster for simple clean up -- keeps it ez. By default, your AWS account will be limited to 5 VPCs. With the default VPC, and assuming zero other provisioned resources, that means you can have a maximum of 4 servers operating simulateously.
+
+## Contributing
+
+### Development
+
+```sh
+# use ezmc locally without npm install --global
+npm run link
+# verify with
+ezmc ls
+```
+
+### Testing
+
+```sh
+# run tests
+npm test
+```
+
+### Pull Requests
+
+Pull requests are welcomed. Please leave detailed reasoning for your change. Bugs should include reproduction steps. OS can sometimes be helpful but this project lets [commander.js](https://github.com/tj/commander.js) manage cross-platform compatibility.
 
 ## License
 
