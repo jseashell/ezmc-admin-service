@@ -13,7 +13,7 @@ Features:
 ### Prerequisites
 
 - [Sign up for AWS](https://aws.amazon.com/free). Be sure to setup billing.
-- (Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+- [Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 - Node.js v20+, `.nvmrc` is included
   
 ```sh
