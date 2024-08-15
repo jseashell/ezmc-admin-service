@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf bin",
-    "build": "npm run clean && ncc build src/index.ts -o bin",
+    "build": "npm run clean && ts-node --swc",
     "link": " npm unlink ezmc && npm link && chmod +x bin/*",
     "test": "jest --coverage",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
@@ -34,6 +34,7 @@
     "jest": "^29.7.0",
     "prettier": "^2.8.3",
     "ts-jest": "^29.2.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "bin": {
