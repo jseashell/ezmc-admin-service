@@ -4,7 +4,7 @@ import { stackName } from '@utils';
 import { status } from '../status/status.command';
 import { stop } from '../stop/stop.command';
 
-export async function remove(serverName: string): Promise<void> {
+export async function rm(serverName: string): Promise<void> {
   status(serverName)
     .then((status) => {
       if (status == 'running') {

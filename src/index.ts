@@ -2,11 +2,18 @@
 
 import 'dotenv/config';
 
-import { copyIpAddress, ipAddress, list, newServer, remove, start, status, stop } from '@commands';
+import { addop, copyIpAddress, ipaddr, list, newServer, rm, rmop, start, status, stop } from '@commands';
 import { program } from 'commander';
 import { CacheFactory } from './cache/cache.factory';
 
 program.name('ezmc').description('CLI for self-hosting a Minecraft Java server with AWS ECS.').version('0.1.0');
+
+program
+  .command('addop')
+  .description('adds a player to the admin list')
+  .argument('<string>', 'server name')
+  .argument('<string>', 'player name')
+  .action((serverName, playerName) => addop(serverName, playerName));
 
 program
   .command('cip')
@@ -18,12 +25,19 @@ program
   .command('ip')
   .description('displays the server ip address')
   .argument('<string>', 'server name')
-  .action((serverName) => ipAddress(serverName).then((ip) => console.log(ip)));
+  .action((serverName) => ipaddr(serverName).then((ip) => console.log(ip)));
 
 program
   .command('ls')
   .description('displays a list of your ezmc servers')
   .action(() => list().then((res) => console.log(res)));
+
+program
+  .command('maxp')
+  .description('updates the max player count')
+  .argument('<string>', 'server name')
+  .argument('<number>', 'desired max number of players')
+  .action((serverName, maxPlayers) => maxPlayers(serverName, maxPlayers));
 
 program
   .command('new')
@@ -35,7 +49,14 @@ program
   .command('rm')
   .description('tear down a server (cannot be undone)')
   .argument('<string>', 'server name')
-  .action((serverName) => remove(serverName));
+  .action((serverName) => rm(serverName));
+
+program
+  .command('rmop')
+  .description('removes a player from the admin list')
+  .argument('<string>', 'server name')
+  .argument('<string>', 'player name')
+  .action((serverName, playerName) => rmop(serverName, playerName));
 
 program
   .command('start')

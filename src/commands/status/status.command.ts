@@ -4,7 +4,7 @@ import { checkStackStatus, clusterArn, serviceExists, serviceName } from '@utils
 
 export async function status(serverName: string): Promise<string> {
   const stackStatus = await checkStackStatus(serverName);
-  if (stackStatus.toLowerCase() != 'update_complete' || stackStatus.toLowerCase() != 'create_complete') {
+  if (stackStatus.toLowerCase() != 'update_complete' && stackStatus.toLowerCase() != 'create_complete') {
     return stackStatus.toLowerCase();
   }
 

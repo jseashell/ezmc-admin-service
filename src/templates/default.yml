@@ -285,7 +285,6 @@ Resources:
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
-      Name: 'ezmc-vpc'
       CidrBlock: 10.100.0.0/26
       EnableDnsSupport: true
       EnableDnsHostnames: true

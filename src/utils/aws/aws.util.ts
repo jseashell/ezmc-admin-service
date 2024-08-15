@@ -1,4 +1,4 @@
-import { CloudFormationClient, DescribeStacksCommand } from '@aws-sdk/client-cloudformation';
+import { CloudFormationClient, DescribeStacksCommand, UpdateStackCommand } from '@aws-sdk/client-cloudformation';
 import { DescribeServicesCommand, ECSClient, ListServicesCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
 
@@ -74,25 +74,16 @@ export async function serviceExists(serverName) {
     .then((res) => res?.services?.length > 0);
 }
 
-export const checkStackStatus = async (stackName: string) => {
-  const client = new CloudFormationClient({ region: 'us-east-1' });
+export const checkStackStatus = async (serverName: string) => {
+  const cache = await CacheFactory.getInstance();
+  const client = new CloudFormationClient({ region: cache.aws.region });
 
   try {
-    const command = new DescribeStacksCommand({ StackName: stackName });
+    const command = new DescribeStacksCommand({ StackName: stackName(serverName) });
     const response = await client.send(command);
 
     if (response.Stacks && response.Stacks.length > 0) {
       const stackStatus = response.Stacks[0].StackStatus || 'UNKNOWN';
-      const rollbackStates = [
-        'ROLLBACK_IN_PROGRESS',
-        'ROLLBACK_COMPLETE',
-        'ROLLBACK_FAILED',
-        'UPDATE_ROLLBACK_IN_PROGRESS',
-        'UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS',
-        'UPDATE_ROLLBACK_FAILED',
-        'UPDATE_ROLLBACK_COMPLETE',
-      ];
-
       return stackStatus.toLowerCase();
     } else {
       return 'unknown';
@@ -101,3 +92,44 @@ export const checkStackStatus = async (stackName: string) => {
     return 'unknown';
   }
 };
+
+export async function getStackParameter(serverName: string, key: string) {
+  const cache = await CacheFactory.getInstance();
+  const client = new CloudFormationClient({ region: cache.aws.region });
+
+  try {
+    const res = await client.send(new DescribeStacksCommand({ StackName: stackName(serverName) }));
+    const parameters = res.Stacks[0].Parameters;
+    const parameter = parameters.find((param) => param.ParameterKey === key);
+    if (parameter) {
+      return parameter.ParameterValue;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function updateStackParameter(serverName: string, key: string, value: string) {
+  const cache = await CacheFactory.getInstance();
+  const client = new CloudFormationClient({ region: cache.aws.region });
+
+  try {
+    await client.send(
+      new UpdateStackCommand({
+        StackName: stackName(serverName),
+        UsePreviousTemplate: true,
+        Parameters: [
+          {
+            ParameterKey: key,
+            ParameterValue: value,
+          },
+        ],
+        Capabilities: ['CAPABILITY_NAMED_IAM'],
+      }),
+    );
+  } catch (error: any) {
+    console.error('failed to update server');
+  }
+}

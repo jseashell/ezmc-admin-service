@@ -3,7 +3,7 @@ import { DescribeContainerInstancesCommand, ECSClient, ListContainerInstancesCom
 import { CacheFactory } from '@cache';
 import { clusterArn, stackExists } from '@utils';
 
-export async function ipAddress(serverName: string): Promise<string> {
+export async function ipaddr(serverName: string): Promise<string> {
   if (!stackExists(serverName)) {
     console.log(`${serverName} does not exist`);
     return '';

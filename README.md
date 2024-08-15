@@ -23,11 +23,14 @@ ezmc new s1
 
 | Command  | Description                                                                                            |
 | :------- | :----------------------------------------------------------------------------------------------------- |
+| `addop`  | Adds a player to the admin list. Stop your server first!                                               |
 | `cip`    | Copies a server's ip address to the clipboard                                                          |
 | `ip`     | Displays a server's ip address                                                                         |
 | `ls`     | Displays a list of your ezmc servers                                                                   |
+| `maxp`   | Removes a player from the admin list. Stop your server first!                                          |
 | `new`    | Creates a new server. Wait a few minutes for commands like `ipaddr` or `status` to function.           |
 | `rm`     | Removes a server (cannot be undone). Wait a few minutes after stopping a server to remove it entirely. |
+| `rmop`   | Removes a player from the admin list. Stop your server first!                                          |
 | `start`  | Starts a server                                                                                        |
 | `status` | Displays a server's status                                                                             |
 | `stop`   | Stops a server                                                                                         |

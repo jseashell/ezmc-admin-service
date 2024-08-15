@@ -3,7 +3,7 @@ import { CacheFactory } from '@cache';
 import { sleep, stackExists } from '@utils';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { ipAddress } from '../ipaddr/ipaddr.command';
+import { ipaddr } from '../ipaddr/ipaddr.command';
 import { status } from '../status/status.command';
 
 export async function newServer(serverName: string) {
@@ -48,7 +48,7 @@ export async function newServer(serverName: string) {
       if (s?.toLowerCase() == 'running') {
         await sleep(1);
         console.log('success!');
-        const ip = await ipAddress(serverName);
+        const ip = await ipaddr(serverName);
         console.log('server ip', ip);
         break;
       }
