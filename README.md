@@ -1,9 +1,21 @@
 # EZMC CLI
 
-Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This CLI is a wrapper around the [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing) Cloudformation template and the AWS SDK that contains useful commands for orchestrating containers without logging in or using the AWS directly (after initial account creation and billing setup).
+Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This projecft is a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources.
+
+Features:
+
+- Useful [commands](#commands) for orchestrating containers with the AWS SDK
+- Supports vanilla and modded servers
+- [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing) claims an inexpensive $10/mo for a server running full-time
 
 ## Usage
 
+### Prerequisites
+
+- [Sign up for AWS](https://aws.amazon.com/free). Be sure to setup billing.
+- (Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+- Node.js v20+, `.nvmrc` is included
+  
 ```sh
 # clone the repo
 git clone git@github.com:jseashell/ezmc-cli.git
@@ -16,8 +28,6 @@ ezmc new s1
 # after a short wait you'll see:
 # server ip 168.192.0.1
 ```
-
-> Requires Node.js v20+, .nvmrc is included
 
 ## Commands
 
