@@ -17,7 +17,7 @@ ezmc new s1
 # server ip 168.192.0.1
 ```
 
-> Requires Node.js v20+
+> Requires Node.js v20+, .nvmrc is included
 
 ## Commands
 
@@ -61,10 +61,21 @@ Each "server" is given its own networking stack and ECS cluster for simple clean
 ### Development
 
 ```sh
+# clone the repo
+git clone git@github.com:jseashell/ezmc-cli.git
+# install dependencies
+# requires Node.js v20+, .nvmrc is included
+[nvm install &&] npm install
+# build the project
+npm run build
 # use ezmc locally without npm install --global
 npm run link
 # verify with
 ezmc ls
+# create your server
+ezmc new s1
+# after a short wait you'll see:
+# server ip 168.192.0.1
 ```
 
 ### Testing
