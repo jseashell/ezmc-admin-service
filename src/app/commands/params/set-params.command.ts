@@ -26,7 +26,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-a, --admins'] = 'invalid name format for one or more admins';
   }
 
-  if (options.difficulty && options.difficulty.toLowerCase().match(/^peaceful|easy|normal|hard$/g)) {
+  if (options.difficulty && options.difficulty.toLowerCase().match(/^(?:peaceful|easy|normal|hard)$/g)) {
     params.push({
       ParameterKey: ParamsKey.DIFFICULTY,
       ParameterValue: options.difficulty.toLowerCase(),
@@ -35,7 +35,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-d, --difficulty'] = 'valid values are [peaceful|easy|normal|hard]';
   }
 
-  if (options.gamemode && options.gamemode.toLowerCase().match(/^creative|survival|adventure|spectator$/g)) {
+  if (options.gamemode && options.gamemode.toLowerCase().match(/^(?:creative|survival|adventure|spectator)$/g)) {
     params.push({
       ParameterKey: ParamsKey.GAMEMODE,
       ParameterValue: options.gamemode.toLowerCase(),
@@ -62,7 +62,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-p, --playermax'] = 'must be 1 - 100';
   }
 
-  if (options.state && options.state.match(/^running|stopped$/g)) {
+  if (options.state && options.state.match(/^(?:running|stopped)$/g)) {
     params.push({
       ParameterKey: ParamsKey.SERVER_STATE,
       ParameterValue: options.state,
