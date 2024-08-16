@@ -1,4 +1,4 @@
-import { DescribeTasksCommand, ECSClient, ListTasksCommand } from '@aws-sdk/client-ecs';
+import { DescribeTasksCommand, ListTasksCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
 import { clusterArn, serviceExists, serviceName, stackStatus } from '@utils';
 
@@ -13,10 +13,10 @@ export async function status(serverName: string): Promise<string> {
     return 'stopped';
   }
 
-  const cache = await CacheFactory.getInstance();
-  const client = new ECSClient({ region: cache.aws.region });
   const arn = await clusterArn(serverName);
-  const res = await client.send(new ListTasksCommand({ cluster: arn, serviceName: serviceName(serverName) }));
+  const res = await CacheFactory.getInstance().aws.clients.ecs.send(
+    new ListTasksCommand({ cluster: arn, serviceName: serviceName(serverName) }),
+  );
 
   if (res?.taskArns?.length == 0) {
     return 'stopped';
@@ -26,7 +26,7 @@ export async function status(serverName: string): Promise<string> {
 
   try {
     const arn = await clusterArn(serverName);
-    const res = await client.send(
+    const res = await CacheFactory.getInstance().aws.clients.ecs.send(
       new DescribeTasksCommand({
         cluster: arn,
         tasks: [taskArn],

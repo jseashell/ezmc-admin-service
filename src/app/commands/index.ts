@@ -1,5 +1,5 @@
 export * from './cip/cip.command';
-export * from './ipaddr/ipaddr.command';
+export * from './ip/ip.command';
 export * from './list/list.command';
 export * from './new/new.command';
 export * from './params/get-params.command';

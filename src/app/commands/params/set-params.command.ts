@@ -1,13 +1,11 @@
-import { CloudFormationClient, Parameter, UpdateStackCommand } from '@aws-sdk/client-cloudformation';
+import { Parameter, UpdateStackCommand } from '@aws-sdk/client-cloudformation';
 import { CacheFactory } from '@cache';
 import { stackName } from '@utils';
 import { ParamsKey } from './params.enum';
 
 export async function setParams(serverName: string, options: Record<string, any>): Promise<void> {
   const params = parse(options);
-  const cache = await CacheFactory.getInstance();
-  const client = new CloudFormationClient({ region: cache.aws.region });
-  await client.send(
+  await CacheFactory.getInstance().aws.clients.cfn.send(
     new UpdateStackCommand({
       StackName: stackName(serverName),
       Parameters: params,

@@ -1,8 +1,7 @@
-import { CloudFormationClient, DeleteStackCommand } from '@aws-sdk/client-cloudformation';
+import { DeleteStackCommand } from '@aws-sdk/client-cloudformation';
 import { CacheFactory } from '@cache';
+import { status, stop } from '@commands';
 import { stackName } from '@utils';
-import { status } from '../status/status.command';
-import { stop } from '../stop/stop.command';
 
 export async function rm(serverName: string): Promise<void> {
   status(serverName)
@@ -13,9 +12,8 @@ export async function rm(serverName: string): Promise<void> {
         return Promise.resolve();
       }
     })
-    .then(() => CacheFactory.getInstance())
-    .then((cache) => {
-      return new CloudFormationClient({ region: cache.aws.region }).send(
+    .then(() => {
+      return CacheFactory.getInstance().aws.clients.cfn.send(
         new DeleteStackCommand({
           StackName: stackName(serverName),
         }),

@@ -8,9 +8,9 @@
     "sourceMap": true,
     "target": "es2015",
     "paths": {
-      "@cache": ["src/cache"],
-      "@commands": ["src/commands"],
-      "@utils": ["src/utils"]
+      "@cache": ["src/app/cache"],
+      "@commands": ["src/app/commands"],
+      "@utils": ["src/app/utils"]
     }
   },
   "include": ["**/*.ts"],
