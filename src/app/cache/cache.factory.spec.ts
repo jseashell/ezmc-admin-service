@@ -4,6 +4,10 @@ import fs from 'fs';
 import { CacheFactory } from './cache.factory';
 
 describe('CacheFactory', () => {
+  beforeEach(() => {
+    jest.spyOn(fs, 'readFileSync').mockReturnValue('');
+  });
+
   it('should be a singleton', () => {
     const a = CacheFactory.getInstance();
     const b = CacheFactory.getInstance();
@@ -18,7 +22,6 @@ describe('CacheFactory', () => {
   });
 
   it('should set region to us-east-1 when a default profile is not present', async () => {
-    jest.spyOn(fs, 'readFileSync').mockReturnValueOnce('no default profile');
     const cache = CacheFactory.getInstance();
     await cache.init();
     expect(cache.aws.region).toBe('us-east-1');
