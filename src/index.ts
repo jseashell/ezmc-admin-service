@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import 'dotenv/config';
-
 import { copyIpAddress, getParams, ipaddr, list, newServer, rm, setParams, start, status, stop } from '@commands';
 import { program } from 'commander';
 import { CacheFactory } from './cache/cache.factory';
