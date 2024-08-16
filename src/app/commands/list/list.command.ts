@@ -1,7 +1,7 @@
 import { ListClustersCommand } from '@aws-sdk/client-ecs';
 import { CacheFactory } from '@cache';
 
-export async function list() {
+export async function list(): Promise<string> {
   const servers = await CacheFactory.getInstance()
     .aws.clients.ecs.send(new ListClustersCommand({}))
     .then((res) => {
