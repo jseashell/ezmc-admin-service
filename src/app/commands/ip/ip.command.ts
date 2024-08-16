@@ -5,7 +5,8 @@ import { status } from '@commands';
 import { clusterArn } from '@utils';
 import { catchError, combineLatestWith, filter, from, iif, map, Observable, of, switchMap } from 'rxjs';
 
-export function ip(serverName: string): Observable<string | unknown> {
+// TODO return Observable<string> somehow
+export function ip(serverName: string): Observable<unknown> {
   return from(status(serverName)).pipe(
     switchMap((status) => {
       return iif(

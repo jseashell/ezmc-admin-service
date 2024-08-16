@@ -1,6 +1,10 @@
 # EZMC CLI
 
-![Coverage total](./badges/coverage-total.svg)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
 
 Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This projecft is a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources.
 

@@ -7,7 +7,7 @@ import { resolve } from 'path';
 import { firstValueFrom } from 'rxjs';
 
 export async function newServer(serverName: string): Promise<void> {
-  if (!serverName || !serverName.match(/[a-zA-Z][-a-zA-Z0-9]*/)) {
+  if (!/[a-zA-Z][-a-zA-Z0-9]*/.exec(serverName)) {
     console.error('invalid name format');
     return;
   }
@@ -40,7 +40,7 @@ export async function newServer(serverName: string): Promise<void> {
         rem % 15 == 0 // don't spam
       ) {
         const s = await status(serverName);
-        if (s?.toLowerCase() == 'running') {
+        if (s == 'running') {
           await sleep(1);
           console.log('success!');
           const ipaddr = await firstValueFrom(ip(serverName));
