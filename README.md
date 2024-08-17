@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="./public/logo-sm.png" />
+  <img src="./public/logo-sm.png" width="320" height="103" alt="EZMC Logo" />
 </p>
 
 <p align="center">
-    <img src="https://github.com/jseashell/ezmc-cli/actions/workflows/build.yml/badge.svg" />
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=coverage" />
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating" />
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating" />
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities" />
-    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs" />
-    <a href="https://www.buymeacoffee.com/jseashell">
-      <img src="https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg" />
+    <img src="https://github.com/jseashell/ezmc-cli/actions/workflows/build.yml/badge.svg" alt="Build badge"/>
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=coverage" alt="Coverage badge" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating" alt="Reliability badge" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating" alt="Security badge" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities" alt="Vulnerabilities badge" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs" alt="Bugs badge" />
+    <a href="https://www.buymeacoffee.com/jseashell" aria-label="Buy me a coffee">
+      <img src="https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg" alt="Buy me a coffee badge" />
     </a>
 </p>
 
