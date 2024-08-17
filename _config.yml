@@ -1,0 +1,11 @@
+# GitHub Pages Jekyll config
+
+source: ./
+
+remote_theme: pages-themes/midnight@v0.2.0
+plugins:
+  - jekyll-remote-theme # add this line to the plugins list if you already have one
+
+title: EZMC
+description: Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service.
+show_downloads: true
