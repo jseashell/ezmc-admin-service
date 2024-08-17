@@ -62,11 +62,11 @@ ezmc new s1
 
 ### Notable Defaults
 
-| Option        |  Value   |
-| :------------ | :------: |
-| Max players   |    10    |
-| Difficulty    |  Normal  |
-| View Distance |    10    |
+| Option        | Value    |
+| :------------ | :------- |
+| Max players   | 10       |
+| Difficulty    | Normal   |
+| View Distance | 10       |
 | Game Mode     | Survival |
 | Level Type    | Default  |
 
