@@ -17,7 +17,7 @@ export function parse(options: Record<string, any>): Parameter[] {
   const params: Parameter[] = [];
   const discard = {};
 
-  if (options.admins && options.admins.match(/^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/g)) {
+  if (options.admins && /^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/.exec(options.admins)) {
     params.push({
       ParameterKey: ParamsKey.ADMINS,
       ParameterValue: options.admins,
@@ -26,7 +26,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-a, --admins'] = 'invalid name format for one or more admins';
   }
 
-  if (options.difficulty && options.difficulty.toLowerCase().match(/^peaceful|easy|normal|hard$/g)) {
+  if (options.difficulty && /^peaceful|easy|normal|hard$/.exec(options.difficulty.toLowerCase())) {
     params.push({
       ParameterKey: ParamsKey.DIFFICULTY,
       ParameterValue: options.difficulty.toLowerCase(),
@@ -35,7 +35,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-d, --difficulty'] = 'valid values are [peaceful|easy|normal|hard]';
   }
 
-  if (options.gamemode && options.gamemode.toLowerCase().match(/^creative|survival|adventure|spectator$/g)) {
+  if (options.gamemode && /^creative|survival|adventure|spectator$/.exec(options.gamemode.toLowerCase())) {
     params.push({
       ParameterKey: ParamsKey.GAMEMODE,
       ParameterValue: options.gamemode.toLowerCase(),
@@ -44,7 +44,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-g, --gamemode'] = 'valid values are [creative|survival|adventure|spectator]';
   }
 
-  if (options.mem && options.mem.match(/[1|2|4|8|16]G/g)) {
+  if (options.mem && /[1|2|4|8|16]G/.exec(options.mem)) {
     params.push({
       ParameterKey: ParamsKey.MEMORY,
       ParameterValue: options.mem,
@@ -62,7 +62,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-p, --playermax'] = 'must be 1 - 100';
   }
 
-  if (options.state && options.state.match(/^running|stopped$/g)) {
+  if (options.state && /^running|stopped$/.exec(options.state)) {
     params.push({
       ParameterKey: ParamsKey.SERVER_STATE,
       ParameterValue: options.state,
@@ -80,7 +80,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-v, --viewdist'] = 'must be 1 - 20';
   }
 
-  if (options.whitelist && options.whitelist.match(/^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/g)) {
+  if (options.whitelist && /^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/.exec(options.whitelist)) {
     params.push({
       ParameterKey: ParamsKey.WHITELIST,
       ParameterValue: options.whitelist,
