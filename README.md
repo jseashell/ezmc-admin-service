@@ -14,7 +14,7 @@
     </a>
 </p>
 
-EZMC is a server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This project is essentially a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources that provisions the [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image ([direct]()).
+A server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This project is essentially a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources that provisions the [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image ([direct]()).
 
 Features:
 
