@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/logo-sm.png" width="320" height="103" alt="EZMC Logo" />
+  <img src="./docs/images/logo-sm.png" width="320" height="103" alt="EZMC Logo" />
 </p>
 
 <p align="center">
