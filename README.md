@@ -1,5 +1,3 @@
-# EZMC CLI
-
 <p align="center">
   <img src="./public/logo-sm.png" />
 </p>
@@ -10,23 +8,26 @@
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating" />
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities" />
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs" />
+    <a href="https://www.buymeacoffee.com/jseashell">
+      <img src="https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg" />
+    </a>
 </p>
 
-Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This projecft is a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources.
+EZMC is a server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This project is essentially a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources that provisions the [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image ([direct]()).
 
 Features:
 
 - Useful [commands](#commands) for orchestrating containers with the AWS SDK
 - Supports vanilla and modded servers
-- [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing) claims an inexpensive $10/mo for a server running full-time
+- [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing) claims an inexpensive $10/mo for a server running full-time. However, it's recommended to `stop` the server when not in use to save money. Spot pricing is set to 5¢.
+
+## Prerequisites
+
+- [Sign up](https://aws.amazon.com/free) for AWS. Be sure to setup billing.
+- [Setup the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+- Node.js v20+, `.nvmrc` is included
 
 ## Usage
-
-### Prerequisites
-
-- [Sign up for AWS](https://aws.amazon.com/free). Be sure to setup billing.
-- [Setup AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
-- Node.js v20+, `.nvmrc` is included
 
 ```sh
 # clone the repo
@@ -85,19 +86,12 @@ Each "server" is given its own networking stack and ECS cluster for simple clean
 ```sh
 # clone the repo
 git clone git@github.com:jseashell/ezmc-cli.git
-# install dependencies
-# requires Node.js v20+, .nvmrc is included
-[nvm install &&] npm install
-# build the project
+npm install
+# build the project and deploy to global installs
 npm run build
-# use ezmc locally without npm install --global
-npm run link
+npm link
 # verify with
 ezmc ls
-# create your server
-ezmc new s1
-# after a short wait you'll see:
-# server ip 168.192.0.1
 ```
 
 ### Testing
