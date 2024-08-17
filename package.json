@@ -12,7 +12,6 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "link": " npm unlink ezmc && npm link && chmod +x bin/*",
     "test": "jest --coverage",
     "format": "prettier --write '**/*.{js,ts,yml,json}' --list-different"
   },
