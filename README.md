@@ -8,6 +8,7 @@
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating" />
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities" />
     <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=coverage" />
     <a href="https://www.buymeacoffee.com/jseashell">
       <img src="https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg" />
     </a>
