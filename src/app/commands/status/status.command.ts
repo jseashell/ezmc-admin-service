@@ -4,8 +4,8 @@ import { clusterArn, serviceExists, serviceName, stackStatus } from '@utils';
 
 export async function status(serverName: string): Promise<string> {
   const status = await stackStatus(serverName);
-  if (status.toLowerCase() != 'update_complete' && status.toLowerCase() != 'create_complete') {
-    return status.toLowerCase();
+  if (status != 'update_complete' && status != 'create_complete') {
+    return status;
   }
 
   const exists = await serviceExists(serverName);
@@ -33,7 +33,7 @@ export async function status(serverName: string): Promise<string> {
       }),
     );
 
-    return res?.tasks?.[0]?.lastStatus?.toLowerCase() || 'launching';
+    return res?.tasks?.[0]?.lastStatus || 'launching';
   } catch (err) {
     return 'stopped';
   }

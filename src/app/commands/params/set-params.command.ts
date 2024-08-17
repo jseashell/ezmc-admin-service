@@ -1,14 +1,22 @@
-import { Parameter, UpdateStackCommand } from '@aws-sdk/client-cloudformation';
+import { Capability, Parameter, UpdateStackCommand } from '@aws-sdk/client-cloudformation';
 import { CacheFactory } from '@cache';
 import { stackName } from '@utils';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { ParamsKey } from './params.enum';
 
 export async function setParams(serverName: string, options: Record<string, any>): Promise<void> {
   const params = parse(options);
+
+  const path = resolve('./src/app/commands/new/templates/default.yml');
+  const templateBody = readFileSync(path).toString();
+
   await CacheFactory.getInstance().aws.clients.cfn.send(
     new UpdateStackCommand({
       StackName: stackName(serverName),
+      TemplateBody: templateBody,
       Parameters: params,
+      Capabilities: [Capability.CAPABILITY_IAM],
     }),
   );
 }
@@ -26,19 +34,19 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-a, --admins'] = 'invalid name format for one or more admins';
   }
 
-  if (options.difficulty && /^peaceful|easy|normal|hard$/.exec(options.difficulty.toLowerCase())) {
+  if (options.difficulty && /^peaceful|easy|normal|hard$/.exec(options.difficulty)) {
     params.push({
       ParameterKey: ParamsKey.DIFFICULTY,
-      ParameterValue: options.difficulty.toLowerCase(),
+      ParameterValue: options.difficulty,
     });
   } else if (options.difficulty) {
     discard['-d, --difficulty'] = 'valid values are [peaceful|easy|normal|hard]';
   }
 
-  if (options.gamemode && /^creative|survival|adventure|spectator$/.exec(options.gamemode.toLowerCase())) {
+  if (options.gamemode && /^creative|survival|adventure|spectator$/.exec(options.gamemode)) {
     params.push({
       ParameterKey: ParamsKey.GAMEMODE,
-      ParameterValue: options.gamemode.toLowerCase(),
+      ParameterValue: options.gamemode,
     });
   } else if (options.gamemode) {
     discard['-g, --gamemode'] = 'valid values are [creative|survival|adventure|spectator]';

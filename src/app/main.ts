@@ -38,15 +38,18 @@ export async function bootstrapApplication(): Promise<void> {
     .description('get/set server parameters')
     .argument(`<string>`, '[get|set]')
     .argument('<string>', 'server name')
-    .option('-a, --admins', 'list of admin player names. comma-delimited, no spaces')
-    .option('-d, --difficulty', '[peaceful|easy|normal|hard]')
-    .option('-g, --gamemode', '[creative|survival|adventue|spectator]')
-    .option('-m, --mem', '[1G|2G|4G|8G|16G] amount of memory to allocate')
-    .option('-p, --playermax', '1 - 100')
-    .option('-s, --state', '[running|stopped] server state')
-    .option('-v, --viewdist', '1-20')
-    .option('-w, --whitelist', 'list of whitelisted player names. comma-delimited, no spaces')
-    .option('-z, --timezone', "the server's timezone. use the canonical name of the format, e.g. America/New_York")
+    .option('-a, --admins <string>', 'list of admin player names. comma-delimited, no spaces')
+    .option('-d, --difficulty <string>', '[peaceful|easy|normal|hard]')
+    .option('-g, --gamemode <string>', '[creative|survival|adventue|spectator]')
+    .option('-m, --mem <string>', '[1G|2G|4G|8G|16G] amount of memory to allocate')
+    .option('-p, --playermax <string>', '1-100')
+    .option('-s, --state <string>', '[running|stopped] server state')
+    .option('-v, --viewdist <string>', '1-20')
+    .option('-w, --whitelist <string>', 'list of whitelisted player names. comma-delimited, no spaces')
+    .option(
+      '-z, --timezone <string>',
+      "the server's timezone. use the canonical name of the format, e.g. America/New_York",
+    )
     .action((action, serverName, options) => {
       if (action == 'get') {
         getParams(serverName);

@@ -83,7 +83,7 @@ export const stack = async (serverName: string) => {
 export const stackStatus = async (serverName: string): Promise<string> => {
   return stack(serverName)
     .then((stack) => {
-      return stack?.StackStatus?.toLowerCase() || 'unknown';
+      return stack?.StackStatus || 'unknown';
     })
     .catch(() => {
       return 'unknown';

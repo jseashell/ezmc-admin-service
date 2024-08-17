@@ -6,6 +6,6 @@ export async function start(serverName: string): Promise<void> {
       updateStackParameter(serverName, 'ServerState', 'Running');
     })
     .catch((error: any) => {
-      console.error(`${serverName} failed to start.`, error.message.toLowerCase());
+      console.error(`${serverName} failed to start.`, error.message);
     });
 }

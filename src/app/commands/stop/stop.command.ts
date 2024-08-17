@@ -6,6 +6,6 @@ export async function stop(serverName: string): Promise<void> {
       updateStackParameter(serverName, 'ServerState', 'Stopped');
     })
     .catch((error: any) => {
-      console.error(`${serverName} failed to stop.`, error.message.toLowerCase());
+      console.error(`${serverName} failed to stop.`, error.message);
     });
 }
