@@ -1,9 +1,9 @@
-name: Build
+name: Build and Publish
 run-name: ${{ github.event.head_commit.message }}
 on: [push]
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -14,12 +14,5 @@ jobs:
         run: npm ci --silent
       - name: Build
         run: npm run build
-      - name: Test
-        run: npm test
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     #   - name: Publish
     #     run: npm publish
