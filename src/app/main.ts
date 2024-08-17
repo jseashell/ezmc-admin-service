@@ -42,9 +42,9 @@ export async function bootstrapApplication(): Promise<void> {
     .option('-d, --difficulty <string>', '[peaceful|easy|normal|hard]')
     .option('-g, --gamemode <string>', '[creative|survival|adventue|spectator]')
     .option('-m, --mem <string>', '[1G|2G|4G|8G|16G] amount of memory to allocate')
-    .option('-p, --playermax <string>', '1-100')
+    .option('-p, --playermax <number>', '1-100')
     .option('-s, --state <string>', '[running|stopped] server state')
-    .option('-v, --viewdist <string>', '1-20')
+    .option('-v, --viewdist <number>', '1-20')
     .option('-w, --whitelist <string>', 'list of whitelisted player names. comma-delimited, no spaces')
     .option(
       '-z, --timezone <string>',

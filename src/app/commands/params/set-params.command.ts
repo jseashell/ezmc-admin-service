@@ -6,7 +6,20 @@ import { resolve } from 'path';
 import { ParamsKey } from './params.enum';
 
 export async function setParams(serverName: string, options: Record<string, any>): Promise<void> {
-  const params = parse(options);
+  const { params, discard } = convertTo(options);
+
+  if (params.length > 0) {
+    console.table(
+      params.reduce((acc, { ParameterKey, ParameterValue }) => {
+        acc[ParameterKey] = ParameterValue;
+        return acc;
+      }, {}),
+    );
+  }
+
+  if (discard.length > 0) {
+    console.log(' *discarded invalid params: ' + discard.join(', '));
+  }
 
   const path = resolve('./src/app/commands/new/templates/default.yml');
   const templateBody = readFileSync(path).toString();
@@ -21,80 +34,96 @@ export async function setParams(serverName: string, options: Record<string, any>
   );
 }
 
-export function parse(options: Record<string, any>): Parameter[] {
+export function convertTo(options: Record<string, any>): { params: Parameter[]; discard: ParamsKey[] } {
   const params: Parameter[] = [];
-  const discard = {};
+  const discard: ParamsKey[] = [];
 
-  if (options.admins && /^(\w+)(,\w+)*$/.exec(options.admins)) {
-    params.push({
-      ParameterKey: ParamsKey.ADMINS,
-      ParameterValue: options.admins,
-    });
-  } else if (options.admins) {
-    discard['-a, --admins'] = 'invalid name format for one or more admins';
+  if (options.admins) {
+    if (/^(\w+)(,\w+)*$/.exec(options.admins)) {
+      params.push({
+        ParameterKey: ParamsKey.ADMINS,
+        ParameterValue: options.admins,
+      });
+    } else {
+      discard.push(ParamsKey.ADMINS);
+    }
   }
 
-  if (options.difficulty && /^(peaceful|easy|normal|hard)$/.exec(options.difficulty)) {
-    params.push({
-      ParameterKey: ParamsKey.DIFFICULTY,
-      ParameterValue: options.difficulty,
-    });
-  } else if (options.difficulty) {
-    discard['-d, --difficulty'] = 'valid values are [peaceful|easy|normal|hard]';
+  if (options.difficulty) {
+    if (/^(peaceful|easy|normal|hard)$/.exec(options.difficulty)) {
+      params.push({
+        ParameterKey: ParamsKey.DIFFICULTY,
+        ParameterValue: options.difficulty,
+      });
+    } else {
+      discard.push(ParamsKey.DIFFICULTY);
+    }
   }
 
-  if (options.gamemode && /^(creative|survival|adventure|spectator)$/.exec(options.gamemode)) {
-    params.push({
-      ParameterKey: ParamsKey.GAMEMODE,
-      ParameterValue: options.gamemode,
-    });
-  } else if (options.gamemode) {
-    discard['-g, --gamemode'] = 'valid values are [creative|survival|adventure|spectator]';
+  if (options.gamemode) {
+    if (/^(creative|survival|adventure|spectator)$/.exec(options.gamemode)) {
+      params.push({
+        ParameterKey: ParamsKey.GAMEMODE,
+        ParameterValue: options.gamemode,
+      });
+    } else {
+      discard.push(ParamsKey.GAMEMODE);
+    }
   }
 
-  if (options.mem && /(1|2|4|8|16)G/.exec(options.mem)) {
-    params.push({
-      ParameterKey: ParamsKey.MEMORY,
-      ParameterValue: options.mem,
-    });
-  } else if (options.mem) {
-    discard['-m, --mem'] = 'valid values are [1G|2G|4G|8G|16G]';
+  if (options.mem) {
+    if (/(1|2|4|8|16)G/.exec(options.mem)) {
+      params.push({
+        ParameterKey: ParamsKey.MEMORY,
+        ParameterValue: options.mem,
+      });
+    } else {
+      discard.push(ParamsKey.MEMORY);
+    }
   }
 
-  if (options.playermax && Number(options.playermax) > 0 && Number(options.playermax <= 100)) {
-    params.push({
-      ParameterKey: ParamsKey.PLAYERS_MAX,
-      ParameterValue: options.playermax,
-    });
-  } else if (options.playermax) {
-    discard['-p, --playermax'] = 'must be 1 - 100';
+  if (options.playermax) {
+    if (Number(options.playermax) > 0 && Number(options.playermax <= 100)) {
+      params.push({
+        ParameterKey: ParamsKey.PLAYERS_MAX,
+        ParameterValue: options.playermax,
+      });
+    } else {
+      discard.push(ParamsKey.PLAYERS_MAX);
+    }
   }
 
-  if (options.state && /^(running|stopped)$/.exec(options.state)) {
-    params.push({
-      ParameterKey: ParamsKey.SERVER_STATE,
-      ParameterValue: options.state,
-    });
-  } else if (options.state) {
-    discard['-s, --state'] = 'valid values are [running|stopped]';
+  if (options.state) {
+    if (/^(running|stopped)$/.exec(options.state)) {
+      params.push({
+        ParameterKey: ParamsKey.SERVER_STATE,
+        ParameterValue: options.state,
+      });
+    } else {
+      discard.push(ParamsKey.SERVER_STATE);
+    }
   }
 
-  if (options.viewdist && Number(options.viewdist) > 0 && Number(options.viewdist <= 20)) {
-    params.push({
-      ParameterKey: ParamsKey.VIEW_DIST,
-      ParameterValue: options.viewdist,
-    });
-  } else if (options.viewdist) {
-    discard['-v, --viewdist'] = 'must be 1 - 20';
+  if (options.viewdist) {
+    if (Number(options.viewdist) > 0 && Number(options.viewdist <= 20)) {
+      params.push({
+        ParameterKey: ParamsKey.VIEW_DIST,
+        ParameterValue: options.viewdist,
+      });
+    } else {
+      discard.push(ParamsKey.VIEW_DIST);
+    }
   }
 
-  if (options.whitelist && /^(\w+)(,\w+)*$/.exec(options.whitelist)) {
-    params.push({
-      ParameterKey: ParamsKey.WHITELIST,
-      ParameterValue: options.whitelist,
-    });
-  } else if (options.whitelist) {
-    discard['-w, --whitelist'] = 'invalid name format for one or more whitelisted players';
+  if (options.whitelist) {
+    if (/^(\w+)(,\w+)*$/.exec(options.whitelist)) {
+      params.push({
+        ParameterKey: ParamsKey.WHITELIST,
+        ParameterValue: options.whitelist,
+      });
+    } else {
+      discard.push(ParamsKey.WHITELIST);
+    }
   }
 
   if (options.timezone) {
@@ -104,17 +133,5 @@ export function parse(options: Record<string, any>): Parameter[] {
     });
   }
 
-  if (Object.keys(discard).length > 0) {
-    console.log('discarded invalid parameters');
-    console.table(discard);
-  }
-
-  console.table(
-    params.reduce((acc, { ParameterKey, ParameterValue }) => {
-      acc[ParameterKey] = ParameterValue;
-      return acc;
-    }, {}),
-  );
-
-  return params;
+  return { params, discard };
 }
