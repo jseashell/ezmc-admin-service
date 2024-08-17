@@ -25,7 +25,7 @@ export function parse(options: Record<string, any>): Parameter[] {
   const params: Parameter[] = [];
   const discard = {};
 
-  if (options.admins && /^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/.exec(options.admins)) {
+  if (options.admins && /^(\w+)(,\w+)*$/.exec(options.admins)) {
     params.push({
       ParameterKey: ParamsKey.ADMINS,
       ParameterValue: options.admins,
@@ -88,7 +88,7 @@ export function parse(options: Record<string, any>): Parameter[] {
     discard['-v, --viewdist'] = 'must be 1 - 20';
   }
 
-  if (options.whitelist && /^([a-zA-Z0-9_]+)(,[a-zA-Z0-9_]+)*$/.exec(options.whitelist)) {
+  if (options.whitelist && /^(\w+)(,\w+)*$/.exec(options.whitelist)) {
     params.push({
       ParameterKey: ParamsKey.WHITELIST,
       ParameterValue: options.whitelist,
