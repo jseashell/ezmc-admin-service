@@ -1,10 +1,16 @@
 # EZMC CLI
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jseashell_ezmc-cli)
+<p align="center">
+  <img src="./public/logo-sm.png" />
+</p>
+
+<p align="center">
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=sqale_rating" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities" />
+    <img src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs" />
+</p>
 
 Server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This projecft is a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources.
 
@@ -64,9 +70,9 @@ ezmc new s1
 
 ## Infrastructure
 
-Resources are provisioned using your current AWS CLI profile, falling back to the default profile, and lastly falling back to `us-east-1` as a default region.
+Resources are provisioned using your default AWS CLI profile, falling back to `us-east-1` as a default region.
 
-AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command or stop and remove the server entirely with `rm`.
+AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request and remain running until told to shutdown via the `stop` command (remove the server entirely with `rm`).
 
 > Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
 
