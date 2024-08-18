@@ -1,0 +1,46 @@
+:host {
+  width: 100%;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: url('/images/mc-dirt-banner.webp');
+}
+
+main {
+  max-width: 70rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+main div.badges {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+a:visited {
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img.terminal {
+  width: 100%;
+  height: auto;
+  padding: 2rem;
+}
