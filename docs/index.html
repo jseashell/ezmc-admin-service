@@ -165,7 +165,11 @@
 
       #back-to-top {
         opacity: 0;
-        transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      #back-to-top.visible {
+        opacity: 1;
       }
     </style>
 
@@ -176,9 +180,9 @@
         const triggerPoint = 200; // Adjust this value to the desired scroll position
 
         if (scrollPosition > triggerPoint) {
-          fadeInElement.style.opacity = 1;
+          fadeInElement.classList.add('visible');
         } else {
-          fadeInElement.style.opacity = 0;
+          fadeInElement.classList.remove('visible');
         }
       });
     </script>
@@ -328,10 +332,8 @@
       </section>
       <section>
         <h3 id="license">License</h3>
-        <details>
-          <summary>This software is distributed under the terms of the MIT License</summary>
           <p>MIT License</p>
-          <p> Copyright (c) 2024 John Schellinger </p>
+          <p>Copyright (c) 2024 John Schellinger</p>
           <p>
             Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
             documentation files (the "Software"), to deal in the Software without restriction, including without
