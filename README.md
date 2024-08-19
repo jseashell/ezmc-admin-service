@@ -1,5 +1,5 @@
-<p align="center" style="background: url(public/mc-dirt-banner.webp); padding: 2rem">
-  <img src="./public/logo-sm.png" width="260" alt="EZMC Logo" />
+<p align="center" style="background: url(docs/images/mc-dirt-banner.webp); padding: 2rem">
+  <img src="./docs/images/logo-sm.png" width="260" alt="EZMC Logo" />
 </p>
 
 <p align="center">
@@ -88,21 +88,14 @@ Pull requests are welcomed. Please leave detailed reasoning for your change. Bug
 ### Development
 
 ```sh
-# clone the repo
 git clone git@github.com:jseashell/ezmc-cli.git
 npm install
-# build the project and deploy to global installs
 npm run build
+chmod +x bin/*
+node bin/index.js ls
+# optional, use like a normal global package
 npm link
-# verify with
 ezmc ls
-```
-
-### Testing
-
-```sh
-# run tests
-npm test
 ```
 
 ## License
