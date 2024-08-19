@@ -1,0 +1,215 @@
+<html>
+  <head>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Minecraft';
+        font-weight: normal;
+        font-style: normal;
+        margin: 0;
+        background-color: #555555;
+        color: white;
+        text-shadow: 0 2px black;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 25%;
+        grid-template-areas:
+          'header header'
+          'main toc';
+      }
+
+      header {
+        grid-area: header;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 0 1rem 0;
+        background: url('../public/mc-dirt-banner.webp');
+      }
+
+      header img {
+        margin: 0 5px;
+      }
+
+      main {
+        grid-area: main;
+        max-width: 1020px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      div.badges {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem 0;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      a,
+      a:visited a:active {
+        color: #6eb83f;
+      }
+
+      a:hover {
+        color: #ae7848;
+      }
+
+      img.terminal {
+        width: 100%;
+        height: auto;
+        padding: 2rem 0;
+      }
+
+      ul.toc {
+        grid-area: toc;
+        align-self: start;
+        list-style-type: none;
+        position: -webkit-sticky;
+        position: sticky;
+        margin: 3rem 0;
+        top: -1px;
+        padding: 1rem 0;
+      }
+
+      .back-to-top {
+        position: absolute;
+        left: -25px;
+      }
+
+      .back-to-top a {
+        color: #ae7848;
+        display: flex;
+        align-items: center;
+      }
+
+      .back-to-top a:hover {
+        color: #794625;
+      }
+
+      ul.toc li:nth-child(2) {
+        padding-top: 1.5rem;
+      }
+
+      ul.commands {
+        width: 100%;
+        margin: 0;
+      }
+      ul.commands li {
+        display: grid;
+        grid-template-columns: 15% 1fr;
+        grid-template-areas: 'command desc';
+        align-items: center;
+      }
+
+      ul.commands p.command span {
+        grid-area: command;
+        background-color: #2f2f2f;
+        margin: 0px;
+        border-radius: 5px;
+        padding: 3px 5px;
+      }
+
+      ul.commands p.desc {
+        grid-area: desc;
+        width: 100%;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-minecraft@1.0.0/index.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  </head>
+  <body>
+    <header id="top">
+      <img src="../public/logo-sm.png" width="320" height="103" alt="EZMC Logo" />
+      <div class="badges">
+        <img src="https://github.com/jseashell/ezmc-cli/actions/workflows/build.yml/badge.svg" alt="Build badge" />
+        <img
+          src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=coverage"
+          alt="Coverage badge" />
+        <img
+          src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=reliability_rating"
+          alt="Reliability badge" />
+        <img
+          src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=security_rating"
+          alt="Security badge" />
+        <img
+          src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=vulnerabilities"
+          alt="Vulnerabilities badge" />
+        <img
+          src="https://sonarcloud.io/api/project_badges/measure?project=jseashell_ezmc-cli&metric=bugs"
+          alt="Bugs badge" />
+        <a href="https://www.buymeacoffee.com/jseashell" aria-label="Buy me a coffee">
+          <img src="https://img.shields.io/badge/Donate-Buy%20me%20a%20coffee-orange.svg" alt="Buy me a coffee badge" />
+        </a>
+      </div>
+    </header>
+    <main>
+      <h1>A server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service.</h1>
+      <p>
+        This project is a wrapper around the AWS SDK and
+        <a href="https://github.com/vatertime/minecraft-spot-pricing">vatertime/minecraft-spot-pricing</a>, a
+        CloudFormation template for managing resources for hosting
+        <a href="https://github.com/itzg/docker-minecraft-server">itzg/docker-minecraft-server</a> Docker image in AWS
+        ECS.
+      </p>
+      <img class="terminal" src="../public/terminal.png" alt="Terminal example" />
+
+      <h3 id="features">Features</h3>
+      <ul>
+        <li>Useful [commands](#commands) for orchestrating containers with the AWS SDK</li>
+        <li>Supports vanilla and modded servers</li>
+        <li>
+          <a href="https://github.com/vatertime/minecraft-spot-pricing">vatertime/minecraft-spot-pricing</a> claims an
+          inexpensive $10/mo for a server running full-time. However, it's recommended to `stop` the server when not in
+          use to save money. Spot pricing is set to 5¢.
+        </li>
+      </ul>
+      <h3 id="prerequisites">Prerequisites</h3>
+      <ul>
+        <li><a href="https://aws.amazon.com/free">Sign up</a> for AWS. Be sure to setup billing.</li>
+        <li
+          >Setup the
+          <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html">AWS CLI </a>.
+        </li>
+        <li>Node.js v20+, `.nvmrc` is included.</li>
+      </ul>
+      <h3 id="commands">Commands</h3>
+      <ul class="commands">
+        <li>
+          <p class="command"><span>cip</span></p>
+          <p class="desc">Copies a server's ip address to the clipboard.</p></li
+        >
+      </ul>
+      <h3 id="parameters">Parameters</h3>
+      <h3 id="infrastructure">Infrastructure</h3>
+      <h3 id="contributing">Contributing</h3>
+      <h3 id="license">License</h3>
+    </main>
+    <ul class="toc">
+      <li class="back-to-top">
+        <a href="#top"><i class="material-icons">arrow_upward</i>Back to top</a></li
+      >
+      <li><a href="#features">Features</a></li>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#parameters">Parameters</a></li>
+      <li><a href="#infrastructure">Infrastructure</a></li>
+      <li><a href="#contributing">Contributing</a></li>
+      <li><a href="#license">License</a></li>
+    </ul>
+  </body>
+</html>

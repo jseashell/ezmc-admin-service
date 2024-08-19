@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="./docs/images/logo-sm.png" width="320" height="103" alt="EZMC Logo" />
+<p align="center" style="background: url(public/mc-dirt-banner.webp); padding: 2rem">
+  <img src="./public/logo-sm.png" width="260" alt="EZMC Logo" />
 </p>
 
 <p align="center">
@@ -14,9 +14,23 @@
     </a>
 </p>
 
-A server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This project is essentially a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources that provisions the [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image ([direct]()).
+A server management CLI for self-hosting Minecraft Java Edition with AWS Elastic Container Service. This project is a wrapper around the AWS SDK and [vatertime/minecraft-spot-pricing](https://github.com/vatertime/minecraft-spot-pricing), a CloudFormation template for managing resources that provisions the [itzg/docker-minecraft-server](https://github.com/itzg/docker-minecraft-server) Docker image.
 
-Features:
+<p align="center">
+    <img src="./public/terminal.png" alt="Example"/>
+</p>
+
+## Table of Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Commands](#commands)
+- [Parameters](#parameters)
+- [Infrastructure](#infrastructure)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
 
 - Useful [commands](#commands) for orchestrating containers with the AWS SDK
 - Supports vanilla and modded servers
@@ -27,21 +41,6 @@ Features:
 - [Sign up](https://aws.amazon.com/free) for AWS. Be sure to setup billing.
 - [Setup the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 - Node.js v20+, `.nvmrc` is included
-
-## Usage
-
-```sh
-# clone the repo
-git clone git@github.com:jseashell/ezmc-cli.git
-# install dependencies
-npm install
-# build the project
-npm run build
-# create your server
-ezmc new s1
-# after a short wait you'll see:
-# server ip 168.192.0.1
-```
 
 ## Commands
 
@@ -58,7 +57,7 @@ ezmc new s1
 | `stop`   | Stops a server.                                                              |
 | `help`   | Displays help.                                                               |
 
-## Options
+## Parameters
 
 ### Notable Defaults
 
