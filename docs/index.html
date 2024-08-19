@@ -115,17 +115,33 @@
         align-items: center;
       }
 
-      ul.commands p.command span {
+      ul.commands p.command {
         grid-area: command;
+      }
+
+      ul.commands p.desc {
+        grid-area: desc;
+        width: 100%;
+      }
+
+      span {
         background-color: #2f2f2f;
         margin: 0px;
         border-radius: 5px;
         padding: 3px 5px;
       }
 
-      ul.commands p.desc {
-        grid-area: desc;
-        width: 100%;
+      div.infra {
+        padding: 0 2.5rem;
+      }
+
+      p.disclaimer {
+        background-color: #2f2f2f;
+        color: #555555;
+        font-style: italic;
+        margin-left: 2rem;
+        padding: 1rem 0 1rem 1rem;
+        width: calc(100% - 5rem);
       }
     </style>
 
@@ -191,11 +207,63 @@
       <ul class="commands">
         <li>
           <p class="command"><span>cip</span></p>
-          <p class="desc">Copies a server's ip address to the clipboard.</p></li
-        >
+          <p class="desc">Copies a server's ip address to the clipboard.</p>
+        </li>
+        <li>
+          <p class="command"><span>ip</span></p>
+          <p class="desc">Displays a server's ip address.</p>
+        </li>
+        <li>
+          <p class="command"><span>ls</span></p>
+          <p class="desc">Lists your servers.</p>
+        </li>
+        <li>
+          <p class="command"><span>new</span></p>
+          <p class="desc">
+            Creates a new server. Wait 5 minutes for commands like <span>ip</span> or <span>status </span>.</p
+          >
+        </li>
+        <li>
+          <p class="command"><span>params</span></p>
+          <p class="desc">Get/set server parameters.</p>
+        </li>
+        <li>
+          <p class="command"><span>start</span></p>
+          <p class="desc">Starts a server.</p>
+        </li>
+        <li>
+          <p class="command"><span>status</span></p>
+          <p class="desc">Displays a server's status.</p>
+        </li>
+        <li>
+          <p class="command"><span>stop</span></p>
+          <p class="desc">Stops a server.</p>
+        </li>
+        <li>
+          <p class="command"><span>help</span></p>
+          <p class="desc">Displays help.</p>
+        </li>
       </ul>
-      <h3 id="parameters">Parameters</h3>
       <h3 id="infrastructure">Infrastructure</h3>
+      <div class="infra">
+        <p>
+          Resources are provisioned using your default AWS CLI profile, falling back to <span>us-east-1</span> as a
+          default region.
+        </p>
+        <p>
+          AWS Elastic Container Service is used to deploy the Minecraft image. EC2 instance(s) are spun up upon request
+          and remain running until told to shutdown via the <span>stop</span> command (remove the server entirely with
+          <span>rm</span>).
+        </p>
+        <p class="disclaimer">
+          Contributors are not responsible for any AWS costs incurred from using this CLI. Use at your own discretion.
+        </p>
+        <p>
+          Each "server" is given its own networking stack and ECS cluster for simple clean up -- keeps it ez. By
+          default, your AWS account will be limited to 5 VPCs. With the default VPC, and assuming zero other provisioned
+          resources, that means you can have a maximum of 4 servers operating simulateously.
+        </p>
+      </div>
       <h3 id="contributing">Contributing</h3>
       <h3 id="license">License</h3>
     </main>
@@ -206,7 +274,6 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#prerequisites">Prerequisites</a></li>
       <li><a href="#commands">Commands</a></li>
-      <li><a href="#parameters">Parameters</a></li>
       <li><a href="#infrastructure">Infrastructure</a></li>
       <li><a href="#contributing">Contributing</a></li>
       <li><a href="#license">License</a></li>
