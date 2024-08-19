@@ -81,6 +81,10 @@ Each "server" is given its own networking stack and ECS cluster for simple clean
 
 ## Contributing
 
+### Pull Requests
+
+Pull requests are welcomed. Please leave detailed reasoning for your change. Bugs should include reproduction steps. OS can sometimes be helpful but this project lets [commander.js](https://github.com/tj/commander.js) manage cross-platform compatibility.
+
 ### Development
 
 ```sh
@@ -100,10 +104,6 @@ ezmc ls
 # run tests
 npm test
 ```
-
-### Pull Requests
-
-Pull requests are welcomed. Please leave detailed reasoning for your change. Bugs should include reproduction steps. OS can sometimes be helpful but this project lets [commander.js](https://github.com/tj/commander.js) manage cross-platform compatibility.
 
 ## License
 
