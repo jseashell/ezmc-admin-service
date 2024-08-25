@@ -8,8 +8,12 @@
     "CLI",
     "ECS"
   ],
+  "homepage": "https://jseashell.github.io/ezmc-cli",
   "author": "John Schellinger",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.16.0"
+  },
   "scripts": {
     "build": "tsc && tsc-alias",
     "test": "jest --coverage",
@@ -42,6 +46,6 @@
     "typescript": "^5.5.4"
   },
   "bin": {
-    "ezmc": "./bin/index.js"
+    "ezmc": "bin/index.js"
   }
 }
