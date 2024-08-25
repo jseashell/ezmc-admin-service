@@ -1,5 +1,6 @@
 {
   "name": "ezmc-cli",
+  "displayName": "EZMC CLI",
   "version": "0.1.0",
   "description": "CLI for self-hosting a Minecraft Java server with AWS Elastic Container Service",
   "keywords": [
@@ -9,10 +10,14 @@
     "ECS"
   ],
   "homepage": "https://jseashell.github.io/ezmc-cli",
-  "author": "John Schellinger",
+  "author": "jseashell",
   "license": "MIT",
   "engines": {
     "node": ">=20.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jseashell/ezmc-cli.git"
   },
   "scripts": {
     "build": "tsc && tsc-alias",
