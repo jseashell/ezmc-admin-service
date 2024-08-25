@@ -1,3 +1,4 @@
+Description: The AWS Cloudformation Template for this EZMC server
 Parameters:
   ECSAMI:
     Description: AWS ECS AMI ID

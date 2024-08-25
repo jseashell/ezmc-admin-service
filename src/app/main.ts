@@ -31,7 +31,8 @@ export async function bootstrapApplication(): Promise<void> {
     .command('new')
     .description('creates a new server. wait 5 minutes for commands like `ipaddr` or `status`')
     .argument('<string>', 'server name. alphanumeric and hyphens only. must start with alpha character')
-    .action((serverName) => newServer(serverName));
+    .option('-t, --type <string>', '[vanilla|auto_curseforge|bukkit|spigot]', 'vanilla')
+    .action((serverName, options) => newServer(serverName, options));
 
   program
     .command('params')
